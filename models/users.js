@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 
+
 const users = db.define(
     "users",
     {
