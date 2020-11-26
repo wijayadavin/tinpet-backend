@@ -2,6 +2,8 @@ const express = require('express')
 const { v4: uuidv4 } = require('uuid')
 const app = express.Router()
 const multer = require('multer')
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -32,5 +34,6 @@ app.post('/file', upload.single('file'), (req, res) => {
         fileUrl
     })
 })
+
 
 module.exports = app
