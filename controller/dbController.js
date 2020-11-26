@@ -1,15 +1,14 @@
-const { v4: uuidv4 } = require('uuid');
 const _ = require('lodash')
 const humps = require('humps')
-const readDir = require('read-dir-deep');
+const readDir = require('read-dir-deep')
 const path = require('path')
+const { v4: uuidv4 } = require('uuid')
 const modelsFilePath = readDir.readDirDeepSync(
     path.join(
         path.resolve(),
         'models'
     )
 )
-
 
 class Controller {
     constructor(tableName) {
@@ -50,7 +49,7 @@ class Controller {
         const result = await new this.model(
             humps.decamelizeKeys(body)
         ).save()
-        return humps.camelizeKeys(result)
+        return humps.camelizeKeys(result)['dataValues']
     }
 
     async edit(id, body) {

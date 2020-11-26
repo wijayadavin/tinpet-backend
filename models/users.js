@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
-
+const { v4: uuidv4 } = require('uuid');
 
 const users = db.define(
     "users",
     {
         id: {
-            type: Sequelize.STRING,
+            type: Sequelize.UUID,
             primaryKey: true
         },
         name: { type: Sequelize.STRING },

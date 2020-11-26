@@ -1,12 +1,11 @@
 const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 
-const pets = db.define(
+const Pets = db.define(
     "pets",
     {
         id: {
             type: Sequelize.UUID,
-            allowNull: false,
             primaryKey: true
         },
         name: { type: Sequelize.STRING, allowNull: false },
@@ -16,9 +15,8 @@ const pets = db.define(
         address: { type: Sequelize.STRING, allowNull: false },
         city: { type: Sequelize.STRING, allowNull: false },
         breed: { type: Sequelize.STRING },
-        matched: { type: Sequelize.STRING, allowNull: false, defaultValue: "available" }, 
-        user_id: { type: Sequelize.STRING, allowNull: false },
+        matched: { type: Sequelize.STRING, allowNull: false, defaultValue: "available" }
     }
 )
 
-module.exports = pets;
+module.exports = Pets;

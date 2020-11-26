@@ -49,7 +49,7 @@ class UserController extends Controller {
             this.body.password = await salt(this.body.password)
 
             const result = await this.add(this.body)
-            result.token = jwt.sign(result.id, jwtConfig.secret, jwtConfig.options)
+            result.token = await jwt.sign({ id: result.id }, jwtConfig.secret, jwtConfig.options)
 
             return result
         } catch (err) { throw err }
