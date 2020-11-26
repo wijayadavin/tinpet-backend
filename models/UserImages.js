@@ -1,16 +1,16 @@
 const Sequelize = require('sequelize')
-const { v4 } = require('uuid')
 const db = require('../configs/dbConnection')
 
-const photo = db.define(
-    "photo",
+const UserImages = db.define(
+    "user_images",
     {
         id: {
             type: Sequelize.UUID,
             primaryKey: true,
-            defaultValue: v4,
         },
-        imageUrl: { type: Sequelize.STRING },
+        url: { type: Sequelize.STRING },
         user_id: { type: Sequelize.STRING, }
     }
 )
+
+module.exports = UserImages
