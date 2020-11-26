@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 const { v4: uuidv4 } = require('uuid');
 
-const users = db.define(
+const Users = db.define(
     "users",
     {
         id: {
@@ -16,4 +16,4 @@ const users = db.define(
     }
 )
 
-module.exports = users;
+module.exports = Users;
