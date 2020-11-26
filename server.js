@@ -4,6 +4,29 @@ const passport = require('passport');
 const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
+const Users = require('./models/users')
+const Pets = require('./models/users')
+const defineRelations = require('./models/defineRelations')
+
+
+// mysql relations:
+db
+  .authenticate()
+  .then(async () => {
+    defineRelations();
+    // await Users.sync({ force: true });
+    // await Pets.sync({ force: true });
+    await db.sync({ force: false });
+    await Users.findAll({
+      logging: console.log,
+    })
+  })
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 db.authenticate().then(() => {
   console.log("Connected to the database!");
