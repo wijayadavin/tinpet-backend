@@ -22,6 +22,7 @@ class Controller {
      * Contoh 02:
      *
      *      const result = new Controller('users').get({ id: req.params.id })
+     * @property getAll, get, add, edit, & remove
      * @param {String} tableName nama table yang ingin diproses, berupa string
      */
     constructor(tableName) {
