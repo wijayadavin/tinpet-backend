@@ -1,23 +1,22 @@
 require('dotenv').config()
 const express = require('express')
-const passport = require('passport');
+const passport = require('passport')
 const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
-const Users = require('./models/users')
+const Users = require('./models/Users')
 const defineRelations = require('./models/defineRelations')
+
 
 // mysql relations:
 db
   .authenticate()
   .then(async () => {
     defineRelations();
-    // await Users.sync({ force: true });
-    // await Pets.sync({ force: true });
     await db.sync({ force: false });
-    await Users.findAll({
-      logging: console.log,
-    })
+    // await Users.findAll({
+    //   logging: console.log,
+    // })
   })
   .then(() => {
     console.log("Connected to the database!");

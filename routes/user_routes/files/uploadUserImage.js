@@ -2,7 +2,7 @@ const express = require('express')
 const { v4: uuidv4 } = require('uuid')
 const app = express.Router()
 const multer = require('multer')
-const errorHandler = require('../../middleware/errorHandler')
+const errorHandler = require('../../../middleware/errorHandler')
 const shortid = require('shortid')
 
 const storage = multer.diskStorage({
@@ -40,8 +40,8 @@ const upload = multer({
 const fs = require('fs')
 const path = require('path')
 const passport = require('passport')
-const db = require('../../configs/dbConnection')
-const Controller = require('../../controller/dbController')
+const db = require('../../../configs/dbConnection')
+const Controller = require('../../../controller/dbController')
 fs.readdir(path.resolve(), (err, files) => {
     if (err) {
         console.log(err);
