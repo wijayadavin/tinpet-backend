@@ -14,12 +14,10 @@ db
   .authenticate()
   .then(async () => {
     defineRelations();
-    // await Users.sync({ force: true });
-    // await Pets.sync({ force: true });
     await db.sync({ force: false });
-    await Users.findAll({
-      logging: console.log,
-    })
+    // await Users.findAll({
+    //   logging: console.log,
+    // })
   })
   .then(() => {
     console.log("Connected to the database!");
