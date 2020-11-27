@@ -1,5 +1,5 @@
-const Users = require('./users');
-const Pets = require('./pets');
+const Users = require('./Users');
+const Pets = require('./Pets');
 const UserImages = require('./UserImages')
 
 

@@ -3,7 +3,7 @@ const humps = require('humps')
 const readDir = require('read-dir-deep')
 const path = require('path')
 const { v4: uuidv4 } = require('uuid')
-const modelsFilePath = readDir.readDirDeepSync(
+const allModelPaths = readDir.readDirDeepSync(
     path.join(
         path.resolve(),
         'models'
@@ -14,9 +14,10 @@ class Controller {
     constructor(tableName) {
         this.tableName = tableName
 
-        modelsFilePath.forEach((filePath) => {
-            if (tableName == path.parse(filePath).name) {
-                this.model = require(`../${filePath}`)
+        // Mencari nama model yang ingin di pakai:
+        allModelPaths.forEach((modelFilePath) => {
+            if (tableName == humps.depascalize(path.parse(modelFilePath).name)) {
+                this.model = require(`../${modelFilePath}`)
             }
         })
     }
