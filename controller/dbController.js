@@ -21,7 +21,6 @@ class Controller {
     constructor(tableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
         this.model = getModel(tableName)
-
     }
 
 
@@ -73,16 +72,16 @@ class Controller {
 
 
     async getJoinLeft(searchParameters, joinedTableName) {
-        const result = await this.model.findAll({
+        const result = await this.model.findOne({
             include: {
                 model: getModel(joinedTableName),
                 required: false,
-                where: searchParameters
+                alias: "userProfileImage"
+                // where: searchParameters
             }
         })
-        const plainObject = _.toPlainObject(result)
-
-        return humps.camelizeKeys(plainObject)['dataValues']
+        const plainObject = _.toPlainObject(result['dataValues'])
+        return humps.camelizeKeys(plainObject)
     }
 
 
