@@ -107,7 +107,7 @@ class Controller {
      *
      *      const result = await new Controller('users').edit(req.params.id, req.body)
      *
-     * @param {Object} id id dari data yang ingin diedit
+     * @param {String} id id dari data yang ingin diedit
      * @param {Object} body data baru yang ingin di update
      * @return {Object} data yang diupdate
      */
@@ -125,7 +125,7 @@ class Controller {
      *
      *      const result = await new Controller('users').remove(req.params.id)
      *
-     * @param {Object} id  id dari data yang ingin dihapus
+     * @param {String} id  id dari data yang ingin dihapus
      * @return {0|1} 0(false) kalau gagal, and 1(true) kalau berhasil
      */
     async remove(id) {
