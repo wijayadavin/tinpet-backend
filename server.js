@@ -7,7 +7,6 @@ const app = express()
 const Users = require('./models/users')
 const defineRelations = require('./models/defineRelations')
 
-
 // mysql relations:
 db
   .authenticate()
@@ -29,6 +28,7 @@ db
 
 app.use(bodyParser.json())
 app.use(passport.initialize());
+app.use('/file', express.static('uploads'))
 
 // Solve CORS for any websites:
 app.use((req, res, next) => {

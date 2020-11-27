@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid')
 const app = express.Router()
 const multer = require('multer')
 const errorHandler = require('../../middleware/errorHandler')
+const shortid = require('shortid')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
         if (splittedFileName.length > 2) {
             console.log("Nama File ada Titiknya");
         } else {
-            splittedFileName[0] = uuidv4()
+            splittedFileName[0] = shortid.generate()
             const joinedFileName = splittedFileName.join('.')
             cb(null, joinedFileName)
         }
@@ -22,14 +23,25 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        const name = file.originalname
+        const splittedName = name.split('.')
+        console.log(splittedName);
+        if (splittedName[1] !== 'jpg') {
+            return cb(new Error('image only'))
+        } else {
+            cb(null, true)
+        }
+    }
+})
 
 const fs = require('fs')
 const path = require('path')
 const passport = require('passport')
 const db = require('../../configs/dbConnection')
 const Controller = require('../../controller/dbController')
-const { nextTick } = require('process')
 fs.readdir(path.resolve(), (err, files) => {
     if (err) {
         console.log(err);
@@ -41,11 +53,11 @@ fs.readdir(path.resolve(), (err, files) => {
 })
 
 app.use(passport.authenticate('bearer', { session: false }))
-app.post('/file', upload.single('file'), (req, res, next) => {
+app.post('/file', upload.single('file'), async (req, res, next) => {
     try {
         let body = {}
         body.userId = req.user.id
-        body.url = `${process.env.MYSQL_HOST}/file/${name}`
+        body.url = `http://${process.env.MYSQL_HOST}:${process.env.PORT}/file/${req.file.filename}`
         const result = await new Controller('user_images')
             .add(body)
         res.send({
@@ -56,7 +68,12 @@ app.post('/file', upload.single('file'), (req, res, next) => {
     }
 })
 
+// app.post('/file', upload.single('file'), (req, res) => {
+//     const fileUrl = `http://${process.env.MYSQL_HOST}:${process.env.PORT}/file/${req.file.filename}`
+//     res.send({
+//         fileUrl
+//     })
+// })
 
 app.use(errorHandler)
-
 module.exports = app
