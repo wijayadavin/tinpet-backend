@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize')
 const basicModel = {}
 basicModel.field = {
     id: {
