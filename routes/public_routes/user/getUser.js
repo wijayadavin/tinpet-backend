@@ -24,13 +24,13 @@ app.get('/user/:id', async (req, res, next) => {
     try {
         if (req.query.id) {
             const result = await new Controller('users')
-                .get({ id: req.query.id })
+                .getJoinLeft({ id: req.query.id }, 'user_images')
 
             return res.send(result)
         }
         if (req.params.id) {
             const result = await new Controller('users')
-                .get({ id: req.params.id })
+                .getJoinLeft({ id: req.params.id }, 'user_images')
 
             return res.send(result)
         }

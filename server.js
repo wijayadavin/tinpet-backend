@@ -4,8 +4,6 @@ const passport = require('passport')
 const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
-const Users = require('./models/users')
-const Pets = require('./models/users')
 const defineRelations = require('./models/defineRelations')
 
 

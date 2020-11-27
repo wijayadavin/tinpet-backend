@@ -1,14 +1,7 @@
 const _ = require('lodash')
 const humps = require('humps')
-const readDir = require('read-dir-deep')
-const path = require('path')
 const { v4: uuidv4 } = require('uuid')
-const allModelPaths = readDir.readDirDeepSync(
-    path.join(
-        path.resolve(),
-        'models'
-    )
-)
+const getModel = require('../helper/getModelHelper')
 
 
 class Controller {
@@ -26,14 +19,9 @@ class Controller {
      * @param {String} tableName nama table yang ingin diproses, berupa string
      */
     constructor(tableName) {
-        this.tableName = tableName
+        // Mencari nama model yang ingin di pakai dan masukan ke this.model:
+        this.model = getModel(tableName)
 
-        // Mencari nama model yang ingin di pakai:
-        allModelPaths.forEach((modelFilePath) => {
-            if (tableName == humps.depascalize(path.parse(modelFilePath).name)) {
-                this.model = require(`../${modelFilePath}`)
-            }
-        })
     }
 
 
@@ -77,6 +65,20 @@ class Controller {
     async get(searchParameters) {
         const result = await this.model.findOne({
             where: searchParameters
+        })
+        const plainObject = _.toPlainObject(result)
+
+        return humps.camelizeKeys(plainObject)['dataValues']
+    }
+
+
+    async getJoinLeft(searchParameters, joinedTableName) {
+        const result = await this.model.findAll({
+            include: {
+                model: getModel(joinedTableName),
+                required: false,
+                where: searchParameters
+            }
         })
         const plainObject = _.toPlainObject(result)
 
