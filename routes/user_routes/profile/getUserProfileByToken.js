@@ -12,7 +12,10 @@ router.get('/profile',
         try {
             const result = await new Controller('users')
                 .get({ id: req.user.id })
-            res.send(result)
+            if (result) {
+                return res.send(result)
+            }
+            next(new CustomError(404, "ER_NOT_FOUND", "Not found", "User id not found"))
         } catch (err) { next(err) }
     }
 )
