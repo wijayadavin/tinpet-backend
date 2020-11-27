@@ -25,11 +25,13 @@ app.get('/user/:id', async (req, res, next) => {
         if (req.query.id) {
             const result = await new Controller('users')
                 .get({ id: req.query.id })
+
             return res.send(result)
         }
         if (req.params.id) {
             const result = await new Controller('users')
                 .get({ id: req.params.id })
+
             return res.send(result)
         }
         next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", "Invalid user id"))
