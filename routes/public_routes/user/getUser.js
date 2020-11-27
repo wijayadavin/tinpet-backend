@@ -34,7 +34,7 @@ app.get('/user/:id', async (req, res, next) => {
 
             return res.send(result)
         }
-        next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", "Invalid user id"))
+        next(new CustomError(404, "ER_NOT_FOUND", "Not found", "The user id was not found"))
     } catch (err) {
         console.log(err.message)
         res.status(500).json({

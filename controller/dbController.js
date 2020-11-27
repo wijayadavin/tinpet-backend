@@ -111,7 +111,7 @@ class Controller {
      */
     async edit(id, body) {
         const foundData = await this.model.findOne({ where: { id: id } })
-        let updated = Object.assign(foundData, body)
+        let updated = Object.assign(foundData, humps.decamelizeKeys(body))
         const result = await updated.save()
 
         return result
@@ -127,8 +127,7 @@ class Controller {
      */
     async remove(id) {
         const result = await this.model
-            .findOne({ where: { id: id } })
-            .destroy()
+            .destroy({ where: { id: id } })
 
         return result
     }
