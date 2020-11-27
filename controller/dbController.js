@@ -17,12 +17,12 @@ class Controller {
      * 
      * Contoh 01:
      *
-     *      const result = new Controller('users').getAll()
+     *      const result = await new Controller('users').getAll()
      *
      * Contoh 02:
      *
-     *      const result = new Controller('users').get({ id: req.params.id })
-     * @property getAll, get, add, edit, & remove
+     *      const result = await new Controller('users').get({ id: req.params.id })
+     * @property getAll, get, add, edit, atau remove
      * @param {String} tableName nama table yang ingin diproses, berupa string
      */
     constructor(tableName) {
