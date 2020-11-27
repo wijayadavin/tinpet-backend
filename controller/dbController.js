@@ -2,7 +2,7 @@ const _ = require('lodash')
 const humps = require('humps')
 const { v4: uuidv4 } = require('uuid')
 const getModel = require('../helper/getModelHelper')
-
+const pluralize = require('pluralize')
 
 class Controller {
     /**
@@ -80,7 +80,11 @@ class Controller {
                 // where: searchParameters
             }
         })
+
+        result['dataValues'][pluralize.singular(joinedTableName)] =
+            result['dataValues'][pluralize.singular(joinedTableName)]['dataValues']
         const plainObject = _.toPlainObject(result['dataValues'])
+
         return humps.camelizeKeys(plainObject)
     }
 
