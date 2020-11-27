@@ -1,14 +1,17 @@
 const Sequelize = require('sequelize')
 const basicModel = {}
-basicModel.field = {
+basicModel.fields = {
     id: {
         type: Sequelize.UUID,
         primaryKey: true
-    }
+    },
+    createdAt: { type: Sequelize.DATE, field: 'created_at' },
+    updatedAt: { type: Sequelize.DATE, field: 'updated_at' }
 }
 
-basicModel.option = {
-    underscored: true
+basicModel.options = {
+    timestamps: true,
+    underscored: true,
 }
 
 module.exports = basicModel
