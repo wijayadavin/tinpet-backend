@@ -1,4 +1,4 @@
-require('dotenv').config()
+// const dotenv = require('dotenv').config()
 const express = require('express')
 const passport = require('passport');
 const db = require('./configs/dbConnection')

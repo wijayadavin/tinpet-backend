@@ -36,7 +36,6 @@ class Controller {
         })
     }
 
-
     async get(searchParameters) {
         const result = await this.model.findOne({
             where: searchParameters
@@ -60,16 +59,6 @@ class Controller {
 
         return result
     }
-
-    // async remove(id) {
-    //     const result = await db(this.tableName)
-    //         .delete()
-    //         .where({ id })
-    //         .catch((err) => {
-    //             throw err
-    //         })
-    //     return result
-    // }
 }
 
 
