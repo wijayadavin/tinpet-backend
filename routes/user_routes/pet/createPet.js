@@ -1,62 +1,36 @@
-const express = require('express')
-const { result } = require('lodash')
-const db = require('../../../configs/dbConnection')
-const Controller = require('../../../controller/dbController')
-const app = express.Router()
-const routeErrorHandler = require('../../middleware/errorHandler')
+const express = require('express') // <-- manggil library express kedalam variable express
+const app = express.Router() // <-- memasukkan class Router() punya si express kedalam variable bernama app sehingga bisa memakai app.post/app.get/app.delete/app.path, dll
 
-// router.post('pet/:id',
-//   auth.authenticate('bearer', { session:true }),
-//   async (req, res, next) => {
-//     //ambil data pet 😺👇
-//     const foundPets = await db.get('pets',
-//     { id: req.params.id })
-//     .catch(err => next(err))
-  
+const Controller = require('../../../controller/dbController') // <-- module-module yang berguna untuk mengubah data database mysql (contoh: CRUD)
 
-//     //atur pets ID & user ID di dalam body sesuai permintaan 👇
-//     req.body.petsId = req.params.id
-//     req.body.userId = req.session.passport.user.userId
-  
-//     //maksimal satu pet untuk satu user 👇
-//     const foundPets = await db.get ('pets', {
-//       petsId: req.body.petsId,
-//       userId: req.body.userId
-//     }).catch(err => next(err))
-  
-//     if (foundPets && foundPets.length > 0) {
-//       //apabila menemukan satu user lebih dari satu pet, maka kirimkan error 👇
-//       return res.status(406).send('Error: the user already submitted a review for this movie')
-//     }
+const routeErrorHandler = require('../../../middleware/errorHandler') // <-- memasukkan class error handler kedalam variable routeErrorHandler
+
+const auth = require('../../../middleware/auth') // <-- memasukkan module auth middleware kedalam variable auth
 
 
-//     //apabila semuanya sudah sesuai, maka lanjutkan 👇
-//     const result = await db.add('pets', req.body)
-//       .catch(err => (err))
-    
-//     // apabila semua data sudah sesuai, maka kirimkan data yang sudah di update 👇
-//     result.message = `The pet was successfully updated.`
-//     result.result = updatedPets
-//     result.result.petsId = foundPets.petsId
-
-//     return res.status(200).send(result)
-//     })
-
-
-app.post('/pet/:id', async (req, res, next) => {
+app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/pet
+  auth.authenticate('bearer', { session: false }), // <-- mengambil dan menerjemahkan data token, dan memasukkan userId dari token kedalam req.user.id
+  async (req, res, next) => {
     try {
+      req.body.userId = req.user.id // <-- cara memasukkan user ID dari req.user.id ke body.userId
+
+      // memasukkan data pet baru ke database dan kalau berhasil akan terekam di variable result:
       const result = await new Controller('pets')
-        .add({ id: req.params.id })
-      res.send(result)
-    } catch (err) { next(err) }
+        //                                ^ class Controller untuk menjalankan sequelize pada table 'pets'
+        //                    ^ class baru
+
+        .add(req.body) // <-- body (data yang mau dimasukan dari request)
+      //    ^req atau request adalah data yang dimasukkan dari postman.
+
+      // mengirim respon hasil data yang berhasil masuk:
+      res.send(result) // response adalah data yang dikembalikan ke postman
+    }
+    // menangkap error dan mengirim ke routeErrorHandler:
+    catch (err) {
+      next(err)
+    }
   })
-  
-  
 
-//apabila akan menjalankan router.post, uncommand 👇
-// router.use(errorHandler);
-// module.exports = router
+app.use(routeErrorHandler) // <-- akan mengirim error ke user
 
-//apabila akan menjalankan app.post, uncommand 👇
-// app.use(routeErrorHandler)
-// module.exports = app
+module.exports = app 
