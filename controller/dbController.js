@@ -2,7 +2,7 @@ const _ = require('lodash')
 const humps = require('humps')
 const { v4: uuidv4 } = require('uuid')
 const getModel = require('../helper/getModelHelper')
-const pluralize = require('pluralize')
+const joinHelper = require('../helper/sequelizeJoinHelper')
 
 class Controller {
     /**
@@ -72,19 +72,18 @@ class Controller {
 
 
     async getJoinLeft(searchParameters, joinedTableName) {
-        const result = await this.model.findOne({
+        joinedTableName = humps.decamelize(joinedTableName)
+        let result = await this.model.findOne({
             include: {
                 model: getModel(joinedTableName),
                 required: false,
-                alias: "userProfileImage"
-                // where: searchParameters
+                where: searchParameters
             }
         })
 
-        result['dataValues'][pluralize.singular(joinedTableName)] =
-            result['dataValues'][pluralize.singular(joinedTableName)]['dataValues']
-        const plainObject = _.toPlainObject(result['dataValues'])
+        result = joinHelper(result, joinedTableName)
 
+        const plainObject = _.toPlainObject(result)
         return humps.camelizeKeys(plainObject)
     }
 
