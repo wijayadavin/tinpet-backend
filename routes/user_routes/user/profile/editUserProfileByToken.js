@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../../middleware/auth')
-const UserController = require('../../../controller/userController')
-const routeErrorHandler = require('../../../middleware/errorHandler')
+const auth = require('../../../../middleware/auth')
+const UserController = require('../../../../controller/userController')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
-router.patch('/profile',
+router.patch('/user/profile',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
