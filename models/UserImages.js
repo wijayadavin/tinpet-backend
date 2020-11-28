@@ -9,7 +9,6 @@ const UserImages = db.define(
             primaryKey: true,
         },
         url: { type: Sequelize.STRING },
-        user_id: { type: Sequelize.STRING, }
     }
 )
 

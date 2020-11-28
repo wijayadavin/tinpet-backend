@@ -8,7 +8,7 @@ const defineRelations = () => {
         onUpdate: 'CASCADE',
     })
 
-    //  Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
 }
 
 module.exports = defineRelations
