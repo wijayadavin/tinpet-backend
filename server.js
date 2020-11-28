@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const passport = require('passport');
+const passport = require('passport')
 const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
@@ -14,12 +14,10 @@ db
   .authenticate()
   .then(async () => {
     defineRelations();
-    // await Users.sync({ force: true });
-    // await Pets.sync({ force: true });
     await db.sync({ force: false });
-    await Users.findAll({
-      logging: console.log,
-    })
+    // await Users.findAll({
+    //   logging: console.log,
+    // })
   })
   .then(() => {
     console.log("Connected to the database!");
@@ -27,10 +25,11 @@ db
   .catch((err) => {
     console.error(err);
   });
+<<<<<<< HEAD
+=======
 
-db.authenticate().then(() => {
-  console.log("Connected to the database!");
-})
+>>>>>>> dev.0.1.0
+
 app.use(bodyParser.json())
 app.use(passport.initialize());
 

@@ -15,7 +15,7 @@ function routeErrorHandler(err, req, res, next) {
     return res.status(400).send(err);
 
   if (errorCodes.some((err) => err === 'ER_NOT_FOUND'))
-    return res.status(401).send(err);
+    return res.status(404).send(err);
 
   if (errorCodes.some((err) => err === 'ER_DUP_ENTRY'))
     return res.status(409).send(err);
