@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
 router.get('/user/notification', // --> tidak menghasilkan query, params ataupun body

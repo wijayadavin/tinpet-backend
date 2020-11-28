@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
 // mengirim like atau unlike berdasarkan id pet penerima request (petId):

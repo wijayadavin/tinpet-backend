@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
+
 
 // read semua chat berdasarkan user token:
 router.get('/user/chat', // --> tidak menghasilkan query, params ataupun body

@@ -1,7 +1,7 @@
-const bodyParser = require('body-parser')
 const express = require('express')
 const router = express.Router()
-const auth = require('../../../../../middleware/auth')
+const auth = require('../../../../middleware/auth')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
 // mengedit match berdasarkan match id (matchId):

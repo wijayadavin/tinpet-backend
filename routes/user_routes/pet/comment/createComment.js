@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
-
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 // membuat comment baru:
 router.post('/pet/comment', // --> menghasilkan req.body

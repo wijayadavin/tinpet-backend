@@ -11,7 +11,10 @@ const defineRelations = () => {
     })
 
     Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
+    Pets.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+
     Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
+    UserImages.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
 }
 
 
