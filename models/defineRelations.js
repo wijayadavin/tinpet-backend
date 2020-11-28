@@ -1,6 +1,6 @@
 const Users = require('./users');
-const Pets = require('./pets');
-const UserImages = require('./UserImages')
+const Pets = require('./Pets');
+
 
 
 const defineRelations = () => {
