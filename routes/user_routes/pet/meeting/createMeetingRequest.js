@@ -1,16 +1,14 @@
-const bodyParser = require('body-parser')
 const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
-router.post('/user/:petId/meeting/request', // --> menghasilkan req.params.petId dan req.body
+router.post('/pet/meeting', // --> menghasilkan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // body.senderUserId = req.user.id
-            // body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
+            // body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.body.petId }
             // body.status = "requested"
             // body.time = date+hour
 
