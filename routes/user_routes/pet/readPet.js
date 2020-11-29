@@ -1,5 +1,4 @@
 const express = require('express')
-const router = require('../../../../teamc-backend/routes/admin/readEntity')
 const Controller = require('../../../controller/dbController')
 const app = express.Router()
 const routeErrorHandler = require('../../../middleware/errorHandler')

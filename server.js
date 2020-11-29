@@ -23,10 +23,6 @@ db
   .catch((err) => {
     console.error(err);
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> dev.0.1.0
 
 app.use(bodyParser.json())
 app.use(passport.initialize());

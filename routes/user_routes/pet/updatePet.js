@@ -1,8 +1,7 @@
 const express = require('express')
-const app = require('../../../../teamc-backend/routes/admin/readEntity')
 const Controller = require('../../../controller/dbController')
 const app = express.Router()
-const routeErrorHandler = require('../../middleware/errorHandler')
+const routeErrorHandler = require('../../../middleware/errorHandler')
 const auth = require('../../../middleware/auth')
 
 

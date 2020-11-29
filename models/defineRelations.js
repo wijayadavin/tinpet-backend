@@ -1,7 +1,8 @@
 const Users = require('./Users');
 const Pets = require('./Pets');
-const UserImages = require('./UserImages')
-
+const UserImages = require('./UserImages');
+const UserNotifications = require('./UserNotifications');
+const PetMeetings = require('./PetMeetings')
 
 const defineRelations = () => {
     const fkOptions = (options) => ({
@@ -10,16 +11,19 @@ const defineRelations = () => {
         onUpdate: 'CASCADE',
     })
 
-    Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
     Pets.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
 
-    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
     UserImages.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
+
+    PetMeetings.belongsTo(Users, fkOptions({ as: 'sender_user_id' }))
+    PetMeetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id' }))
+    Users.hasMany(PetMeetings, fkOptions({ foreignKey: 'user_id' }))
+
+    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'user_id' }))
 }
 
 
-<<<<<<< HEAD
 module.exports = defineRelations
-=======
-module.exports = defineRelations
->>>>>>> dev.0.1.0
