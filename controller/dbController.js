@@ -65,6 +65,8 @@ class Controller {
     async get(searchParameters) {
         const result = await this.model.findOne({
             where: searchParameters
+        }).catch((err) => {
+            throw err
         })
         const plainObject = _.toPlainObject(result)
 
@@ -88,12 +90,42 @@ class Controller {
             include: {
                 ...joinedTableNames,
             }
+        }).catch((err) => {
+            throw err
         })
 
         // format hasil menggunakan join helper:
         // result = joinHelper(result, joinedTableNames)
         // const plainObject = _.toPlainObject(result)
-        return humps.camelizeKeys(plainObject)
+        // return humps.camelizeKeys(plainObject)
+        return result
+    }
+
+
+    async getAllJoinLeft(joinedTableNames) {
+        // kalau variable joinedTableNames bukan Array, maka jadikan array:
+        if (typeof joinedTableNames == 'string') {
+            joinedTableNames = [joinedTableNames]
+        }
+        // lakukan decamelize:
+        joinedTableNames = joinedTableNames.map(humps.decamelize)
+        // jadikan class model sequelize:
+        joinedTableNames = joinedTableNames.map(getModel)
+
+        // lakukan pencarian dengan sequelize:
+        let result = await this.model.findAll({
+            include: [
+                ...joinedTableNames
+            ]
+        }).catch((err) => {
+            throw err
+        })
+
+        // format hasil menggunakan join helper:
+        // result = joinHelper(result, joinedTableNames)
+        // const plainObject = _.toPlainObject(result)
+        // return humps.camelizeKeys(plainObject)
+        return result
     }
 
 
@@ -103,14 +135,16 @@ class Controller {
      *
      *      const result = await new Controller('users').add(req.body)
      *
-     * @param {Object} body data yang akan dimasukan
+     * @param {Object} body data yang akan dimasukan, keys boleh menggunakan camel/snake case.
      * @return {Object} data yang ditemukan
      */
     async add(body) {
         body.id = uuidv4()
         const result = await new this.model(
             humps.decamelizeKeys(body)
-        ).save()
+        ).save().catch((err) => {
+            throw err
+        })
 
         return humps.camelizeKeys(result)['dataValues']
     }
@@ -127,8 +161,14 @@ class Controller {
      */
     async edit(id, body) {
         const foundData = await this.model.findOne({ where: { id: id } })
+            .catch((err) => {
+                throw err
+            })
         let updated = Object.assign(foundData, humps.decamelizeKeys(body))
-        const result = await updated.save()
+        const result = await updated
+            .save().catch((err) => {
+                throw err
+            })
 
         return result
     }
@@ -145,6 +185,9 @@ class Controller {
     async remove(id) {
         const result = await this.model
             .destroy({ where: { id: id } })
+            .catch((err) => {
+                throw err
+            })
 
         return result
     }

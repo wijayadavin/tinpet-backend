@@ -26,13 +26,13 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             const result1 = await new Controller('petMeetings').add(req.body)
 
             const senderNotif = {
-                id: req.user.id,
+                userId: req.user.id,
                 text: "Your meeting request has been sent",
                 url: `/pet-meeting/${result1.id}`,
             }
 
             const recipientNotif = {
-                id: foundRecipientPet.userId,
+                userId: foundRecipientPet.userId,
                 text: "You received a new meeting request",
                 url: `/pet-meeting/${result1.id}`,
             }
@@ -42,11 +42,11 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             const result3 = await new Controller('userNotifications').add(recipientNotif)
 
             // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1):
-            res.send({
-                ...result1,
-                ...result2,
-                ...result3
-            })
+            res.send([
+                result1,
+                result2,
+                result3
+            ])
         } catch (err) {
             next(err)
         }
