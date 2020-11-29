@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const humps = require('humps')
 const { v4: uuidv4 } = require('uuid')
-const getModel = require('../helper/getModelHelper')
+const getModel = require('../models')
 const joinHelper = require('../helper/sequelizeJoinHelper')
 
 class Controller {
@@ -15,6 +15,7 @@ class Controller {
      * Contoh 02:
      *
      *      const result = await new Controller('users').get({ id: req.params.id })
+     * 
      * @property getAll, get, add, edit, atau remove
      * @param {String} tableName nama table yang ingin diproses, berupa string
      */
@@ -71,19 +72,27 @@ class Controller {
     }
 
 
-    async getJoinLeft(searchParameters, joinedTableName) {
-        joinedTableName = humps.decamelize(joinedTableName)
+    async getJoinLeft(searchParameters, joinedTableNames) {
+        // kalau variable joinedTableNames bukan Array, maka jadikan array:
+        if (typeof joinedTableNames == 'string') {
+            joinedTableNames = [joinedTableNames]
+        }
+        // lakukan decamelize:
+        joinedTableNames = joinedTableNames.map(humps.decamelize)
+        // jadikan class model sequelize:
+        joinedTableNames = joinedTableNames.map(getModel)
+
+        // lakukan pencarian dengan sequelize:
         let result = await this.model.findOne({
+            where: searchParameters,
             include: {
-                model: getModel(joinedTableName),
-                required: false,
-                where: searchParameters
+                ...joinedTableNames,
             }
         })
 
-        result = joinHelper(result, joinedTableName)
-
-        const plainObject = _.toPlainObject(result)
+        // format hasil menggunakan join helper:
+        // result = joinHelper(result, joinedTableNames)
+        // const plainObject = _.toPlainObject(result)
         return humps.camelizeKeys(plainObject)
     }
 

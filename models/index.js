@@ -1,13 +1,15 @@
+// "use strict" mengubah bad syntax jadi error, terutama untuk meningkatkan security:
+"use strict";
 // Mencari nama model yang ingin di pakai:
 const readDir = require('read-dir-deep')
 const path = require('path')
+const humps = require('humps')
 const allModelPaths = readDir.readDirDeepSync(
     path.join(
         path.resolve(),
         'models'
     )
 )
-const humps = require('humps')
 
 
 module.exports = (tableName) => {
