@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../../../../middleware/auth')
+const auth = require('../../middleware/auth')
 const pluralize = require('pluralize')
-
+const routeErrorHandler = require('../../middleware/errorHandler')
 
 // mengedit meeting berdasarkan meeting id (meetingId):
 router.get('/:singularTableName/:id', // --> menghasilkan req.params.id dan req.params.singularTableName

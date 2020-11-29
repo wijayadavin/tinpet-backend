@@ -19,9 +19,9 @@ class Controller {
      * @property getAll, get, add, edit, atau remove
      * @param {String} tableName nama table yang ingin diproses, berupa string
      */
-    constructor(tableName) {
+    constructor(pluralTableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
-        this.model = getModel(tableName)
+        this.model = getModel(humps.decamelize(pluralTableName))
     }
 
 

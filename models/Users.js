@@ -11,7 +11,7 @@ const Users = db.define(
         name: { type: Sequelize.STRING },
         email: { type: Sequelize.STRING },
         password: { type: Sequelize.STRING },
-        mobile_number: { type: Sequelize.STRING }
+        mobileNumber: { type: Sequelize.STRING, field: "mobile_number" }
     },
     {
         ...basicModel.options

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
+const Controller = require('../../../../controller/dbController')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
@@ -10,22 +11,42 @@ router.post('/pet/meeting', // --> menghasilkan req.body
     async (req, res, next) => {
         try {
             // body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.body.petId }
-            // body.status = "requested"
-            // body.time = date+hour
+            const foundRecipientPet = await new Controller('pets').get({ id: req.body.petId })
+            delete req.body.petId
 
-            // delete body.date
-            // delete body.hour
+            // merge body and hour:
+            req.body.time = await req.body.date + "T" + req.body.hour
+            delete req.body.date
+            delete req.body.hour
 
-            // const newMessage = body.message
-            // delete body.message
+            // define senderUserId:
+            req.body.recipientId = req.user.id
 
-            // result1 = post data dari body ke table 'pet_meetings'
+            // create data baru di table meetings
+            const result1 = await new Controller('petMeetings').add(req.body)
 
-            // result2 = post data dari newMessage ke table 'chat', kalau chatId sudah ada, createChatLine, kalau tidak ada, createChat.
+            const senderNotif = {
+                id: req.user.id,
+                text: "Your meeting request has been sent",
+                url: `/pet-meeting/${result1.id}`,
+            }
 
-            // result3 = kirim notification ke kedua belah pihak
+            const recipientNotif = {
+                id: foundRecipientPet.userId,
+                text: "You received a new meeting request",
+                url: `/pet-meeting/${result1.id}`,
+            }
 
-            // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
+            // kirim notification ke kedua belah pihak:
+            const result2 = await new Controller('userNotifications').add(senderNotif)
+            const result3 = await new Controller('userNotifications').add(recipientNotif)
+
+            // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1):
+            res.send({
+                ...result1,
+                ...result2,
+                ...result3
+            })
         } catch (err) {
             next(err)
         }
