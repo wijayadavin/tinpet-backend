@@ -18,4 +18,8 @@ const defineRelations = () => {
 }
 
 
+<<<<<<< HEAD
 module.exports = defineRelations
+=======
+module.exports = defineRelations
+>>>>>>> dev.0.1.0
