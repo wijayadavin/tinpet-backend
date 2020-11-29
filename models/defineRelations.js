@@ -10,11 +10,10 @@ const defineRelations = () => {
         onUpdate: 'CASCADE',
     })
 
-    // Pengaturan relationship antar database:
+    Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
     Pets.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasOne(Pets, fkOptions({ foreignKey: 'user_id' }))
 
-    Users.hasOne(UserImages, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
     UserImages.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
 }
 
