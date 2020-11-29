@@ -3,8 +3,8 @@ const db = require('../configs/dbConnection')
 const basicModel = require('./basicModel')
 
 
-const PetMeetings = db.define(
-    "pet_meetings",
+const Meetings = db.define(
+    "meetings",
     {
         ...basicModel.fields,
         time: { type: Sequelize.STRING, allowNull: false },
@@ -17,4 +17,4 @@ const PetMeetings = db.define(
 )
 
 
-module.exports = PetMeetings;
+module.exports = Meetings;

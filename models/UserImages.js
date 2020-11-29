@@ -5,7 +5,7 @@ const basicModel = require('./basicModel')
 
 
 const UserImages = db.define(
-    "user_images",
+    "userImages",
     {
         ...basicModel.fields,
         url: { type: Sequelize.STRING }

@@ -5,8 +5,8 @@ basicModel.fields = {
         type: Sequelize.UUID,
         primaryKey: true
     },
-    createdAt: { type: Sequelize.DATE, field: 'created_at' },
-    updatedAt: { type: Sequelize.DATE, field: 'updated_at' }
+    createdAt: { type: Sequelize.DATE },
+    updatedAt: { type: Sequelize.DATE }
 }
 
 basicModel.options = {

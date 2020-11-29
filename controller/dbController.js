@@ -21,7 +21,7 @@ class Controller {
      */
     constructor(pluralTableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
-        this.model = getModel(humps.decamelize(pluralTableName))
+        this.model = getModel(pluralTableName).model
     }
 
 
@@ -94,10 +94,6 @@ class Controller {
             throw err
         })
 
-        // format hasil menggunakan join helper:
-        // result = joinHelper(result, joinedTableNames)
-        // const plainObject = _.toPlainObject(result)
-        // return humps.camelizeKeys(plainObject)
         return result
     }
 
@@ -121,10 +117,6 @@ class Controller {
             throw err
         })
 
-        // format hasil menggunakan join helper:
-        // result = joinHelper(result, joinedTableNames)
-        // const plainObject = _.toPlainObject(result)
-        // return humps.camelizeKeys(plainObject)
         return result
     }
 

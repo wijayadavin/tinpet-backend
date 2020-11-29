@@ -48,7 +48,7 @@ router.get('/:singularTableName/:id', // --> menghasilkan req.params.id dan req.
                 // kalau berhasil, jalankan res.send(result):
                 return res.send(result)
             }
-            next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", `Please insert the right path params`))
+            next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", `Please insert the right path parameters`))
 
         } catch (err) {
             next(err)

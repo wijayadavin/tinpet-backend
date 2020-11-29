@@ -13,10 +13,12 @@ const allModelPaths = readDir.readDirDeepSync(
 
 
 module.exports = (tableName) => {
+    tableName = humps.decamelize(tableName)
     let result = {}
     allModelPaths.forEach((modelFilePath) => {
         if (tableName == humps.depascalize(path.parse(modelFilePath).name)) {
-            result = require(`../${modelFilePath}`)
+            result.model = require(`../${modelFilePath}`)
+            result.as = humps.camelize(tableName)
         }
     })
     return result
