@@ -16,10 +16,8 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * foundRecipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
              */
 
-
-
-            // ekspektasi data body seperti ini:
             /**
+             * ekspektasi data body seperti ini:
              * {
              *      userId: req.user.id
              *      petId: req.params.petId
@@ -30,7 +28,6 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * result1 = tambah atau delete like dengan data body
              * result2 = kirim notification ke sender ({ id: req.user.id })
              * result3 = kirim notification ke recipient ({ id: foundRecipientUserId })
-
              */
 
             // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
