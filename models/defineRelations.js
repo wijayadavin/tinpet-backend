@@ -12,16 +12,16 @@ const defineRelations = () => {
     })
 
     // pets:
-    Pets.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
-    Users.hasMany(Pets, fkOptions({ foreignKey: 'userId' }))
+    Pets.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
 
     // userImages:
-    UserImages.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
-    Users.hasMany(UserImages, fkOptions({ foreignKey: 'userId' }))
+    UserImages.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
 
     // petMeetings:
-    Meetings.belongsTo(Users, fkOptions({ as: 'senderUserId' }))
-    Meetings.belongsTo(Users, fkOptions({ as: 'recipientUserId' }))
+    Meetings.belongsTo(Users, fkOptions({ as: 'sender_user_id' }))
+    Meetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id' }))
 
     // userNotifications:
     UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
