@@ -32,8 +32,7 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * result3 = kirim notification ke recipient ({ id: foundRecipientUserId })
 
              */
-            // 
-            // 
+
             // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
         } catch (err) {
             next(err)
