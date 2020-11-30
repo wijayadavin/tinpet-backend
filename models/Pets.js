@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 
-const pets = db.define(
+const Pets = db.define(
     "pets",
     {
         id: {
@@ -17,8 +17,7 @@ const pets = db.define(
         city: { type: Sequelize.STRING, allowNull: false },
         breed: { type: Sequelize.STRING },
         matched: { type: Sequelize.STRING, allowNull: false, defaultValue: "available" },
-        user_id: { type: Sequelize.STRING, allowNull: false },
     }
 )
 
-module.exports = pets;
+module.exports = Pets;
