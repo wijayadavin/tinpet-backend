@@ -1,14 +1,18 @@
 const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
+const basicModel = require('./basicModel')
 
 const UserImages = db.define(
     "userImages",
     {
-        id: {
-            type: Sequelize.UUID,
-            primaryKey: true,
+        ...basicModel.fields,
+        url: {
+            type: Sequelize.STRING,
+            allowNull: false
         },
-        url: { type: Sequelize.STRING },
+    },
+    {
+        ...basicModel.options
     }
 )
 
