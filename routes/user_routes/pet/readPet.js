@@ -1,12 +1,12 @@
 const express = require('express')
-const router = require('../../../../teamc-backend/routes/admin/readEntity')
-const Controller = require('../../../controller/dbController')
 const app = express.Router()
+const Controller = require('../../../controller/dbController')
 const routeErrorHandler = require('../../../middleware/errorHandler')
-
+const auth = require('../../../middleware/auth')
 
 // get all:
 app.get('/pet',
+    auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
             const result = await new Controller('pets')
@@ -18,6 +18,7 @@ app.get('/pet',
 
 // get by id path:
 app.get('/pet/:id',
+    auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
             const result = await new Controller('pets')
