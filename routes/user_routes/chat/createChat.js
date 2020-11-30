@@ -4,15 +4,18 @@ const Controller = require('../../../controller/dbController')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const auth = require('../../../middleware/auth')
 
-
-app.patch('/pet',
+app.post('/chat',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-            const result = await new Controller('pets')
-                .edit(req.userId, req.body)
+            req.body.userId = req.user.id
+            const result = await new Controller('chats')
+                .add(req.body)
             res.send(result)
-        } catch (err) { next(err) }
+        }
+        catch (err) {
+            next(err)
+        }
     })
 
 
