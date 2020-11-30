@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 
 const UserImages = db.define(
-    "user_images",
+    "userImages",
     {
         id: {
             type: Sequelize.UUID,

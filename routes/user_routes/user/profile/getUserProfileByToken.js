@@ -1,12 +1,12 @@
 const express = require('express')
-const Controller = require('../../../controller/dbController')
+const Controller = require('../../../../controller/dbController')
 const router = express.Router()
-const auth = require('../../../middleware/auth')
+const auth = require('../../../../middleware/auth')
 
-const routeErrorHandler = require('../../../middleware/errorHandler')
+const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
-router.get('/profile',
+router.get('/user/profile',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
