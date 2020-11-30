@@ -28,8 +28,8 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
 
             /**
              * result1 = tambah atau delete like dengan data body
-             * result2 = kirim notification ke sender
-             * result3 = kirim notification ke recipient
+             * result2 = kirim notification ke sender ({ id: req.user.id })
+             * result3 = kirim notification ke recipient ({ id: foundRecipientUserId })
 
              */
             // 
