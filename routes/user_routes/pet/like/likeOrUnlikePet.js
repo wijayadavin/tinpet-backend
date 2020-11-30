@@ -13,7 +13,7 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * kumpulkan data ke variable body:
              * let body = {}
              * body.senderUserId = req.user.id
-             * body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
+             * foundRecipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
              */
 
 
@@ -21,8 +21,8 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
             // ekspektasi data body seperti ini:
             /**
              * {
-             *      userId: req.body.senderUserId
-             *      perId: req.body.recipientUserId
+             *      userId: req.user.id
+             *      petId: req.params.petId
              * }
              */
 
