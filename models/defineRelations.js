@@ -4,6 +4,7 @@ const UserImages = require('./UserImages');
 const UserNotifications = require('./UserNotifications');
 const Meetings = require('./Meetings');
 const PetImages = require('./PetImages');
+const PetsLike = require('./PetsLike')
 
 const defineRelations = () => {
     const fkOptions = (options) => ({
@@ -31,6 +32,9 @@ const defineRelations = () => {
     // petImages
     PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
     Pets.hasMany(PetImages, fkOptions({ foreignKey: 'pet_id' }))
+
+    //petsLike
+    PetsLike.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
 }
 
 
