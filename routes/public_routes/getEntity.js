@@ -6,21 +6,13 @@ const Controller = require('../../controller/dbController')
 
 
 // mengedit meeting berdasarkan meeting id (meetingId):
-router.get('/:singularTableName', // --> menghasilkan req.params.id dan req.params.singularTableName
+router.get('/admin/:singularTableName', // --> menghasilkan req.params.id dan req.params.singularTableName
     // auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
             req.params.singularTableName = req.params.singularTableName.replace("-", "_")
             const pluralTableName = pluralize.plural(req.params.singularTableName)
-            // result = ambil data berdasarkan id, lengkap dengan semua associations-nya (dijoin semua)
-            if (pluralTableName == 'users') {
-                // cari data berdasarkan id dari path params:
-                const result = await new Controller(pluralTableName)
-                    .getAllJoinLeft(['user_images', 'user_notifications'])
 
-                // kalau berhasil, jalankan res.send(result):
-                return res.send(result)
-            }
             // cari data berdasarkan id dari path params:
             const result = await new Controller(pluralTableName)
                 .getAll()
@@ -34,16 +26,27 @@ router.get('/:singularTableName', // --> menghasilkan req.params.id dan req.para
 )
 
 // mengedit meeting berdasarkan meeting id (meetingId):
-router.get('/:singularTableName/:id', // --> menghasilkan req.params.id dan req.params.singularTableName
+router.get('/admin/:singularTableName/:id', // --> menghasilkan req.params.id dan req.params.singularTableName
     // auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
+            // parse table name:
             const pluralTableName = pluralize.plural(req.params.singularTableName)
+
             // result = ambil data berdasarkan id, lengkap dengan semua associations-nya (dijoin semua)
             if (req.params.id) {
                 // cari data berdasarkan id dari path params:
                 const result = await new Controller(pluralTableName)
                     .get({ id: req.params.id })
+
+                // kalau berhasil, jalankan res.send(result):
+                return res.send(result)
+            }
+
+            if (req.query.id) {
+                // cari data berdasarkan id dari path query:
+                const result = await new Controller(pluralTableName)
+                    .get({ id: req.query.id })
 
                 // kalau berhasil, jalankan res.send(result):
                 return res.send(result)

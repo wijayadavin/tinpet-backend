@@ -7,16 +7,14 @@ const routeErrorHandler = require('../../../middleware/errorHandler')
 
 app.get('/user', async (req, res, next) => {
     try {
+        // result = ambil data berdasarkan id, lengkap dengan semua associations-nya (dijoin semua)
         const result = await new Controller('users')
-            .getAll()
+            .getAllJoinLeft(['user_images'])
 
-        res.send(result)
+        // kalau berhasil, jalankan res.send(result):
+        return res.send(result)
     } catch (err) {
-        console.log(err.message)
-        res.status(500).json({
-            code: 500,
-            message: "Oops, something is wrong here"
-        })
+        next(err)
     }
 })
 
