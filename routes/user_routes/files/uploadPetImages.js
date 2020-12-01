@@ -52,13 +52,12 @@ fs.readdir(path.resolve(), (err, files) => {
     }
 })
 
-app.use(passport.authenticate('bearer', { session: false }))
-app.post('/file/user', upload.single('file'), async (req, res, next) => {
+app.post('/file/pet/:petId', upload.single('file'), async (req, res, next) => {
     try {
         let body = {}
-        body.userId = req.user.id
+        body.petId = req.params.petId
         body.url = `http://${process.env.MYSQL_HOST}:${process.env.PORT}/file/${req.file.filename}`
-        const result = await new Controller('user_images')
+        const result = await new Controller('pet_images')
             .add(body)
         res.send({
             result
