@@ -4,6 +4,8 @@ const Controller = require('../../../controller/dbController') // <-- module-mod
 const routeErrorHandler = require('../../../middleware/errorHandler') // <-- memasukkan class error handler kedalam variable routeErrorHandler
 const auth = require('../../../middleware/auth') // <-- memasukkan module auth middleware kedalam variable auth
 const upload = require('../../../middleware/uploadMiddleware')
+const { petBodyParser, petResultParser } = require('../../../helper/modelHelpers/pet')
+
 
 app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/pet
   upload.single('file'),
@@ -11,11 +13,14 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
   async (req, res, next) => {
     try {
       req.body.userId = req.user.id // <-- cara memasukkan user ID dari req.user.id ke body.userId
+
+      // input data preprocessing:
+      req.body = petBodyParser(req.body)
+
       // result1 = memasukkan data pet baru ke database:
       const result1 = await new Controller('pets')
         //                                ^ class Controller untuk menjalankan sequelize pada table 'pets'
         //                    ^ class baru
-
         .add(req.body) // <-- body (data yang mau dimasukan dari request)
       //    ^req atau request adalah data yang dimasukkan dari postman.
 
@@ -36,7 +41,7 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
 
 
       // mengirim respon hasil data yang berhasil masuk:
-      res.send({ pet: result1, petImage: result2 }) // response adalah data yang dikembalikan ke postman
+      res.send({ pet: petResultParser(result1), petImage: result2 }) // response adalah data yang dikembalikan ke postman
     }
     // menangkap error dan mengirim ke routeErrorHandler:
     catch (err) {

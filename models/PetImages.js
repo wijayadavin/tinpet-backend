@@ -3,7 +3,7 @@ const db = require('../configs/dbConnection')
 const basicModel = require('./basicModel')
 
 const PetImages = db.define(
-    "pet_images",
+    "petImages",
     {
         ...basicModel.fields,
         url: { type: Sequelize.STRING, },
