@@ -5,6 +5,11 @@ const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
 const defineRelations = require('./models/defineRelations')
+const fs = require('fs')
+const readDir = require('read-dir-deep');
+const path = require('path')
+const routesPath = path.resolve('routes')
+const filePaths = readDir.readDirDeepSync(routesPath)
 
 
 // mysql relations:
@@ -72,10 +77,6 @@ fs.readdir(path.resolve(), (err, files) => {
 
 
 // run all routes in routes folder:
-const readDir = require('read-dir-deep');
-const path = require('path')
-const routesPath = path.resolve('routes')
-const filePaths = readDir.readDirDeepSync(routesPath)
 filePaths.forEach((filePath) => {
   const relativeFilePath = `./${filePath}`
   console.log(`${relativeFilePath} loaded!`);

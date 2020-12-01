@@ -23,7 +23,12 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
       // apabila user mengupload Image, maka gunakan image:
       let petImageData = {}
       petImageData.petId = result1.id
-      petImageData.url = `http://${process.env.DOMAIN}/file/${req.file.filename}`
+      if (req.file.filename) {
+        petImageData.url = `http://${process.env.DOMAIN}/file/${req.file.filename}`
+      } else {
+        petImageData.url = `http://${process.env.DOMAIN}/file/default-pet.jpg`
+      }
+
 
       // result2 = memasukan data petImage ke database:
       const result2 = await new Controller('pet_images')
