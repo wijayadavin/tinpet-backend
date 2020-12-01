@@ -5,6 +5,11 @@ const db = require('./configs/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
 const defineRelations = require('./models/defineRelations')
+const fs = require('fs')
+const readDir = require('read-dir-deep');
+const path = require('path')
+const routesPath = path.resolve('routes')
+const filePaths = readDir.readDirDeepSync(routesPath)
 
 
 // mysql relations:
@@ -43,6 +48,18 @@ app.use((req, res, next) => {
   next()
 })
 
+// Solve folder for uploads:
+fs.readdir(path.resolve(), (err, files) => {
+  if (err) {
+    console.log(err);
+  } else {
+    if (!files.includes('uploads')) {
+      fs.mkdir(path.resolve('uploads'), (err) => 1)
+    }
+  }
+})
+
+
 // Using the CORS package:
 // const cors = require('cors')
 // const cookieSession = require('cookie-session')
@@ -60,10 +77,6 @@ app.use((req, res, next) => {
 
 
 // run all routes in routes folder:
-const readDir = require('read-dir-deep');
-const path = require('path')
-const routesPath = path.resolve('routes')
-const filePaths = readDir.readDirDeepSync(routesPath)
 filePaths.forEach((filePath) => {
   const relativeFilePath = `./${filePath}`
   console.log(`${relativeFilePath} loaded!`);

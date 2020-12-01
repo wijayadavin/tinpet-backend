@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const pluralize = require('pluralize')
 const routeErrorHandler = require('../../middleware/errorHandler')
 const Controller = require('../../controller/dbController')
-
+const formatTableName = require('../../helper/tableNameHelper')
 
 // mengedit meeting berdasarkan meeting id (meetingId):
 router.get('/admin/:singularTableName', // --> menghasilkan req.params.id dan req.params.singularTableName
@@ -34,10 +33,33 @@ router.get('/admin/:singularTableName/:id', // --> menghasilkan req.params.id da
             const pluralTableName = pluralize.plural(req.params.singularTableName)
 
             // result = ambil data berdasarkan id, lengkap dengan semua associations-nya (dijoin semua)
+            if (pluralTableName == 'users') {
+                // cari data berdasarkan id dari path params:
+                const result = await new Controller(pluralTableName)
+                    .getJoinLeft({ id: req.params.id }, ['user_images', 'user_notifications'])
+
+
+                // kalau berhasil, jalankan res.send(result):
+                return res.send(result)
+            }
+
+
+            if (pluralTableName == 'pets') {
+                // cari data berdasarkan id dari path params:
+                const result = await new Controller(pluralTableName)
+                    .getJoinLeft({ id: req.params.id }, 'pet_images')
+
+
+                // kalau berhasil, jalankan res.send(result):
+                return res.send(result)
+            }
+
+
             if (req.params.id) {
                 // cari data berdasarkan id dari path params:
                 const result = await new Controller(pluralTableName)
                     .get({ id: req.params.id })
+
 
                 // kalau berhasil, jalankan res.send(result):
                 return res.send(result)
@@ -53,6 +75,8 @@ router.get('/admin/:singularTableName/:id', // --> menghasilkan req.params.id da
             }
             next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", `Please insert the right path parameters`))
 
+
+            next(new CustomError(400, "ER_BAD_REQUEST_ERROR", "Bad request", `Please insert the right path parameters`))
         } catch (err) {
             next(err)
         }
