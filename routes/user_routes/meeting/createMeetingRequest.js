@@ -53,7 +53,7 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
             // kirim chatLine baru ke responder:
             const result4 = await new Controller('chatLines').add({
-                chatId: foundChatId || ,
+                chatId: foundChatId,
                 userId: req.user.id,
                 text: req.body.text
             })
