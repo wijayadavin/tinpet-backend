@@ -4,85 +4,91 @@ const auth = require('../../../../middleware/auth')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
 const Controller = require('../../../../controller/dbController')
 const nodemailer = require('nodemailer')
+const nodemailerConfig = require('../../../../configs/nodemailerConfig')
+
 
 // mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
 router.post('/pet/meeting', // --> menghasilkan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.body.petId }
+            // foundRecipientPet = ambil data userId pada table 'pets' dengan { id: req.body.petId }:
             const foundRecipientPet = await new Controller('pets').get({ id: req.body.petId })
             delete req.body.petId
 
-            // merge body and hour:
+            // merge body and hour ke dalam body dengan key 'time':
             req.body.time = await req.body.date + "T" + req.body.hour
             delete req.body.date
             delete req.body.hour
 
-            // define senderUserId:
+            // masukan UserId penerima (recipient) ke body:
             req.body.recipientId = req.user.id
 
-            // create data baru di table meetings
+            // create data baru di table meetings:
             const result1 = await new Controller('meetings').add(req.body)
 
+            // siapkan data notif untuk sender user:
             const senderNotif = {
                 userId: req.user.id,
                 text: "Your meeting request has been sent",
-                url: `/pet-meeting/${result1.id}`,
+                url: `${process.env.DOMAIN}/pet-meeting/${result1.id}`,
             }
 
+            // siapkan data notif untuk recipient user:
             const recipientNotif = {
                 userId: foundRecipientPet.userId,
                 text: "You received a new meeting request",
-                url: `/pet-meeting/${result1.id}`,
+                url: senderNotif.url,
             }
 
             // kirim notification ke kedua belah pihak:
             const result2 = await new Controller('userNotifications').add(senderNotif)
             const result3 = await new Controller('userNotifications').add(recipientNotif)
 
-            // buat transporter object menggunakan SMTP Transport:
-            let transporter = nodemailer.createTransport({
-                // host: 'smtp-relay.gmail.com',
-                // port: 587,
-                // secure: false, // true kalau sesuai dengan port, 'secure: false' juga digunakan apabila tidak ada ssl
 
-                // settings for gmail:
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL, // generated ethereal user
-                    pass: process.env.PASSWORD // generated ethereal password
-                },
-                tls: { rejectUnauthorized: false } //option tambahan untuk testing di localhost
-            })
+            // kirim chatLine baru ke responder:
+            const result4 = await new Controller('chatLines').add()
 
-            // data yang akan dipakai dalam pengiriman email:
+
+            // data yang akan dipakai dalam pengiriman email untuk result 4:
             let mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
-                // address:
                 to: 'wijayadavin@gmail.com',
                 subject: '🐱 You received a new meeting request in TinPet!',
-                text: 'Hello world!'
-                // html: '<h1>Hello world!</h1>'
+                html: `
+                <h1>
+                    Hi! Your pet named ${foundRecipientPet.name} has received a meeting request!
+                </h1>
+                <p>
+                    Please go to this <a href="${recipientNotif.url}">link</a> to respond the request:
+                </p>
+                `
             }
 
-            // result 4: mengirimkan notifikasi email
-            await transporter.sendMail(mailOptions, (err, info) => {
-                if (err) {
-                    return console.error(err);
-                }
-                console.log({
-                    messageSent: info.messageId,
-                    previewUrl: nodemailer.getTestMessageUrl(info)
-                });
-            })
+            // result 4, mengirimkan notifikasi email:
+            const result5 = await nodemailerConfig.sendMail(mailOptions)
+                .catch(err => { next(err) })
 
             // kalau berhasil, jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
-            res.send([
-                result1,
-                result2,
-                result3
-            ])
+            if (result5) {
+                res.send({
+                    result: result1,
+                    senderNotif: result2,
+                    recipientNotif: result3,
+                    chatlines: result4,
+                    recipientEmailNotif: {
+                        messageSent: result5.messageId,
+                        ...mailOptions
+                    }
+                })
+            } else {
+                res.send({
+                    result: result1,
+                    senderNotif: result2,
+                    recipientNotif: result3,
+                    recipientEmailNotif: null
+                })
+            }
         } catch (err) {
             next(err)
         }
