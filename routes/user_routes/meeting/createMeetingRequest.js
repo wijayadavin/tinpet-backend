@@ -31,7 +31,7 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             const senderNotif = {
                 userId: req.user.id,
                 text: "Your meeting request has been sent",
-                url: `${process.env.DOMAIN}/pet-meeting/${result1.id}`,
+                url: `${process.env.BASE_URL}/pet-meeting/${result1.id}`,
             }
 
             // siapkan data notif untuk recipient user:
