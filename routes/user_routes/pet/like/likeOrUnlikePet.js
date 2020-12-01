@@ -5,16 +5,30 @@ const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 
 // mengirim like atau unlike berdasarkan id pet penerima request (petId):
-router.post('/pet/meeting/request', // --> menghasilkan req.params.petId dan req.body
+router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // body.senderUserId = req.user.id
-            // body.recipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
+            /**
+             * kumpulkan data ke variable body:
+             * let body = {}
+             * body.senderUserId = req.user.id
+             * foundRecipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
+             */
 
-            // result1 = tambah atau delete like dengan data body
+            /**
+             * ekspektasi data body seperti ini:
+             * {
+             *      userId: req.user.id
+             *      petId: req.params.petId
+             * }
+             */
 
-            // result2 = kirim notification ke kedua belah pihak
+            /**
+             * result1 = tambah atau delete like dengan data body
+             * result2 = kirim notification ke sender ({ id: req.user.id })
+             * result3 = kirim notification ke recipient ({ id: foundRecipientUserId })
+             */
 
             // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
         } catch (err) {
