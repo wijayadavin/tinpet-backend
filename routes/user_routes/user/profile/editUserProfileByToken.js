@@ -10,7 +10,7 @@ router.patch('/user/profile',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-            if (req.file.filename) {
+            if (req.file) {
                 const result1 = await new UserController(req.body).update(req.user.id)
 
                 // result2 = edit data petImage di database:

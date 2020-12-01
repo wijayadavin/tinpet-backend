@@ -17,40 +17,40 @@ const defineRelations = () => {
     })
 
     // pets:
-    Pets.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(Pets, fkOptions({ foreignKey: 'user_id' }))
-
-    // userImages:
-    UserImages.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(UserImages, fkOptions({ foreignKey: 'user_id' }))
-
-    // petMeetings:
-    Meetings.belongsTo(Users, fkOptions({ as: 'sender_user_id' }))
-    Meetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id' }))
-
-    // userNotifications:
-    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'user_id' }))
-
-    // userChats:
-    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id1' }))
-    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id2' }))
-    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id1' }))
-    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id2' }))
-
-    // userChatLines:
-    UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'user_chat_id' }))
-    UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'user_chat_id' }))
-
-    // petImages
-    PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
-    Pets.hasMany(PetImages, fkOptions({ foreignKey: 'pet_id' }))
+    Pets.belongsTo(Users, fkOptions({ foreignKey: 'userId', as: 'petOwner' }))
+    Users.hasMany(Pets, fkOptions({ foreignKey: 'userId', as: 'petOwner' }))
 
     //PetLikes
-    PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
-    PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'user_id' }))
-    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'pet_id' }))
+    PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id', as: 'likeRecipientPet' }))
+    PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'user_id', as: 'likeSenderUser' }))
+    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'user_id', as: 'likeSenderUser' }))
+    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'pet_id', as: 'likeRecipientPet' }))
+
+    // petMeetings:
+    Meetings.belongsTo(Users, fkOptions({ as: 'sender_user_id', as: 'meetingSenderUser' }))
+    Meetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id', as: 'meetingRecipientUser' }))
+
+    // petImages
+    PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'petId', as: 'petImageOwner' }))
+    Pets.hasOne(PetImages, fkOptions({ foreignKey: 'petId', as: 'petImageOwner' }))
+
+    // userImages:
+    UserImages.belongsTo(Users, fkOptions({ foreignKey: 'userId', as: 'userImageOwner' }))
+    Users.hasOne(UserImages, fkOptions({ foreignKey: 'userId', as: 'userImageOwner' }))
+
+    // userNotifications:
+    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'user_id', as: 'userNotificationOwner' }))
+    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'user_id', as: 'userNotificationOwner' }))
+
+    // userChats:
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id1', as: 'chatParticipant1' }))
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id2', as: 'chatParticipant2' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id1', as: 'chatParticipant1' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id2', as: 'chatParticipant2' }))
+
+    // userChatLines:
+    UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'user_chat_id', as: 'userChatRoom' }))
+    UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'user_chat_id', as: 'userChatRoom' }))
 }
 
 

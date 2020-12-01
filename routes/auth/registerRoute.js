@@ -9,18 +9,16 @@ app.post('/auth/register', async (req, res, next) => {
     // parse mobile number data:
     req.body.mobileNumber = "+" + req.body.mobileNumber.replace(" ", "")
 
-
     const result1 = await new UserController(req.body)
       .register()
 
-    let userImageData = {
-      userId: result1.id,
-      url: `${process.env.BASE_URL}/file/default-user.jpg`
-    }
 
     // result2 = memasukan data petImage ke database:
     const result2 = await new Controller('user_images')
-      .add(userImageData)
+      .add({
+        userId: result1.id,
+        url: `${process.env.BASE_URL}/file/default-user.jpg`
+      })
 
 
     res.send({ user: result1, userImage: result2 })

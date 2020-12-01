@@ -12,7 +12,7 @@ router.post('/user/:userId', // --> menghasilkan req.params.userId
             // senderId = req.user.id
             // recipientId = req.params.userId
 
-            // foundChatId = berdasarkan { userId1 = recipientId } dan { userId2 = senderId } ataupun sebaliknya (2x pencarian)
+            // foundChatId = berdasarkan { user1Id = recipientId } dan { user2Id = senderId } ataupun sebaliknya (2x pencarian)
 
             // result = post data dari body ke table 'chat_lines' berdasarkan { id: foundChatId }
 

@@ -11,7 +11,7 @@ app.patch('/pet/:petId',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-            if (req.file.filename) {
+            if (req.file) {
                 const result1 = await new Controller('pets')
                     .edit(req.params.petId, req.body)
 

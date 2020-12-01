@@ -48,11 +48,11 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
             // cari chatId:
             let senderChatList1 = await new Controller('userChats').get({
-                userId1: req.user.id
+                user1Id: req.user.id
             })
 
             let senderChatList2 = await new Controller('userChats').get({
-                userId2: req.user.id
+                user2Id: req.user.id
             })
 
 
@@ -84,8 +84,8 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             } else {
                 // buat chat baru:
                 const newChat = await new Controller('userChats').add({
-                    userId1: req.user.id,
-                    userId2: foundRecipientPet.userId
+                    user1Id: req.user.id,
+                    user2Id: foundRecipientPet.userId
                 })
                 // kirim chatLine baru ke responder:
                 result4 = await new Controller('userChatLines').add({

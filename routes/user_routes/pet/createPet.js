@@ -23,7 +23,7 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
       // apabila user mengupload Image, maka gunakan image:
       let petImageData = {}
       petImageData.petId = result1.id
-      if (req.file.filename) {
+      if (req.file) {
         petImageData.url = `${process.env.BASE_URL}/file/${req.file.filename}`
       } else {
         petImageData.url = `${process.env.BASE_URL}/file/default-pet.jpg`
