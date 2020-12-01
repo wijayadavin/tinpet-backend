@@ -4,7 +4,7 @@ const UserImages = require('./UserImages');
 const UserNotifications = require('./UserNotifications');
 const Meetings = require('./Meetings');
 const PetImages = require('./PetImages');
-const PetsLike = require('./PetsLike')
+const PetLikes = require('./PetLikes')
 
 const defineRelations = () => {
     const fkOptions = (options) => ({
@@ -33,8 +33,11 @@ const defineRelations = () => {
     PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
     Pets.hasMany(PetImages, fkOptions({ foreignKey: 'pet_id' }))
 
-    //petsLike
-    PetsLike.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
+    //PetLikes
+    PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
+    PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'user_id' }))
+    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'pet_id' }))
 }
 
 

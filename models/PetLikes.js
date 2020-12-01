@@ -2,8 +2,8 @@ const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 const basicModel = require('./basicModel')
 
-const PetsLike = db.define(
-    "petsLike",
+const PetLikes = db.define(
+    "petLikes",
     {
         ...basicModel.fields,
     },
@@ -12,4 +12,4 @@ const PetsLike = db.define(
     }
 )
 
-module.exports = PetsLike
+module.exports = PetLikes

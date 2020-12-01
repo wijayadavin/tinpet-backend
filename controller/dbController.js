@@ -64,7 +64,7 @@ class Controller {
      */
     async get(searchParameters) {
         const result = await this.model.findOne({
-            where: searchParameters
+            where: humps.decamelizeKeys(searchParameters)
         }).catch((err) => {
             throw err
         })

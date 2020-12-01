@@ -3,6 +3,7 @@ const Controller = require('../../../../controller/dbController')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
+const customError = require('../../../../helper/customErrorHelper')
 
 
 // mengirim like atau unlike berdasarkan id pet penerima request (petId):
@@ -17,12 +18,15 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * foundRecipientUserId = ambil data userId pada table 'pets' dengan { id: req.params.petId }
              */
 
-            req.body.userId = req.user.id
-            let body = {}
-            body.senderUserId = req.user.id
-            const foundRecipientUserId = await new Controller('pets')
-                .get({ id: req.params.petId })
 
+            let data = {}
+            data.userId = req.user.id
+            data.petId = req.params.petId
+            const foundLike = await new Controller('petLikes')
+                .get({
+                    user_id: req.user.id,
+                    pet_id: req.params.petId
+                })
 
             /**
              * ekspektasi data body seperti ini:
@@ -39,24 +43,26 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              * result2 = kirim notification ke sender ({ id: req.user.id })
              * result3 = kirim notification ke recipient ({ id: foundRecipientUserId })
              */
-            const result1 = await new Controller('petsLike').add(req.body)
+            if (foundLike) {
+                await new Controller('petLikes').remove(foundLike.id)
+                res.send('The user was succesfully unlike the pet')
+            } else {
+                const foundRecipientUser = await new Controller('users').get({ id: req.user.id })
+                const result1 = await new Controller('petLikes').add(data)
 
-            const senderNotif = {
-                userId: req.user.id,
-                text: "Liked",
-                url: `/pet-meeting/${result1.id}`,
+                const recipientNotif = {
+                    userId: req.user.id,
+                    text: `${foundRecipientUser.name} like your pet`,
+                    url: `/pet-like/${result1.id}`
+                }
+                const result2 = await new Controller('userNotifications').add(recipientNotif)
+
+                res.send({ petLike: result1, recipientNotif: result2 })
             }
-
-            const recipientNotif = {
-                userId: foundRecipientPet.userId,
-                text: `${foundRecipientUserId} like your photo`,
-                url: `/pet-meeting/${result1.id}`,
-            }
-
-            const result2 = await new Controller('userNotifications').add(senderNotif)
-            const result3 = await new Controller('userNotifications').add(recipientNotif)
+            next(new customError(400, ER_BAD_REQUEST, "Bad Request", 'Invalid request format'))
 
             // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
+
         } catch (err) {
             next(err)
         }
