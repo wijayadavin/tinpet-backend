@@ -1,8 +1,6 @@
 const _ = require('lodash')
-const humps = require('humps')
 const { v4: uuidv4 } = require('uuid')
 const getModel = require('../models')
-const joinHelper = require('../helper/sequelizeJoinHelper')
 
 class Controller {
     /**
@@ -37,13 +35,7 @@ class Controller {
             .catch((err) => {
                 throw err
             })
-
-        return result.map(res => {
-            const plainObject = _.toPlainObject(res)
-            const camelCaseObject = humps.camelizeKeys(plainObject)
-
-            return camelCaseObject['dataValues']
-        })
+        return result
     }
 
 
@@ -68,9 +60,7 @@ class Controller {
         }).catch((err) => {
             throw err
         })
-        const plainObject = _.toPlainObject(result)
-
-        return humps.camelizeKeys(plainObject)['dataValues']
+        return result
     }
 
 
@@ -79,8 +69,6 @@ class Controller {
         if (typeof joinedTableNames == 'string') {
             joinedTableNames = [joinedTableNames]
         }
-        // lakukan decamelize:
-        joinedTableNames = joinedTableNames.map(humps.decamelize)
         // jadikan class model sequelize:
         joinedTableNames = joinedTableNames.map(getModel)
 
@@ -103,8 +91,6 @@ class Controller {
         if (typeof joinedTableNames == 'string') {
             joinedTableNames = [joinedTableNames]
         }
-        // lakukan decamelize:
-        joinedTableNames = joinedTableNames.map(humps.decamelize)
         // jadikan class model sequelize:
         joinedTableNames = joinedTableNames.map(getModel)
 
@@ -133,12 +119,12 @@ class Controller {
     async add(body) {
         body.id = uuidv4()
         const result = await new this.model(
-            humps.decamelizeKeys(body)
+            body
         ).save().catch((err) => {
             throw err
         })
 
-        return humps.camelizeKeys(result)['dataValues']
+        return result['dataValues']
     }
 
 
@@ -156,13 +142,13 @@ class Controller {
             .catch((err) => {
                 throw err
             })
-        let updated = Object.assign(foundData, humps.decamelizeKeys(body))
+        let updated = Object.assign(foundData, body)
         const result = await updated
             .save().catch((err) => {
                 throw err
             })
 
-        return result
+        return result['dataValues']
     }
 
 

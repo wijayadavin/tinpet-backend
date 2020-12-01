@@ -45,9 +45,6 @@ class UserController extends Controller {
         try {
             usersSchema.required = ["name", "email", "password", "mobileNumber"]
             this.validate()
-
-            this.body.password = await salt(this.body.password)
-
             const result = await this.add(this.body)
             result.token = await jwt.sign({ id: result.id }, jwtConfig.secret, jwtConfig.options)
 

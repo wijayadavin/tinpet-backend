@@ -8,10 +8,10 @@ const Users = db.define(
     "users",
     {
         ...basicModel.fields,
-        name: { type: Sequelize.STRING },
-        email: { type: Sequelize.STRING },
-        password: { type: Sequelize.STRING },
-        mobileNumber: { type: Sequelize.STRING }
+        name: { type: Sequelize.STRING, allowNull: false },
+        email: { type: Sequelize.STRING, allowNull: false },
+        password: { type: Sequelize.STRING, allowNull: false },
+        mobileNumber: { type: Sequelize.STRING, allowNull: false }
     },
     {
         ...basicModel.options
