@@ -46,7 +46,10 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
 
             // cari chatId:
-            const foundChatId =
+            const sender = await new Controller('userNotifications').get({
+                userId1: req.user.id,
+                userId2: req.user.id
+            })
 
             // kirim chatLine baru ke responder:
             const result4 = await new Controller('chatLines').add({
