@@ -2,18 +2,14 @@ const Sequelize = require('sequelize')
 const db = require('../configs/dbConnection')
 const basicModel = require('./basicModel')
 
-const UserImages = db.define(
-    "userImages",
+const PetLikes = db.define(
+    "petLikes",
     {
         ...basicModel.fields,
-        url: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
     },
     {
         ...basicModel.options
     }
 )
 
-module.exports = UserImages
+module.exports = PetLikes
