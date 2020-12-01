@@ -10,7 +10,7 @@ app.get('/pet',
     async (req, res, next) => {
         try {
             const result = await new Controller('pets')
-                .getAll()
+                .getAllJoinLeft('petImages')
             res.send(result)
         } catch (err) { next(err) }
     })
@@ -22,7 +22,7 @@ app.get('/pet/:id',
     async (req, res, next) => {
         try {
             const result = await new Controller('pets')
-                .get({ id: req.params.id })
+                .getJoinLeft({ id: req.params.id }, 'petImages')
             res.send(result)
         } catch (err) { next(err) }
     })

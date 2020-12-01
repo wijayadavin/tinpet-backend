@@ -19,7 +19,7 @@ const petsSchema = {
             "type": "string",
             "format": "type",
             "allowNull": "false"
-        }, 
+        },
         "age": {
             "type": "integer",
             "format": "age"
@@ -40,7 +40,7 @@ const petsSchema = {
         "city": {
             "type": "string",
             "minLength": 2,
-            "maxLength" : 50,
+            "maxLength": 50,
             "allowNull": "false",
             "format": "city"
         },
@@ -51,7 +51,7 @@ const petsSchema = {
             "allowNull": "false",
             "format": "breed"
         },
-        "matched": {
+        "isMatched": {
             "type": "sequalize",
             "allowNull": "false",
             "defaultValue": "available"
@@ -59,7 +59,7 @@ const petsSchema = {
         "user_id": {
             "type": "sequalize",
             "allowNull": "false"
-        }       
+        }
     }
 }
 
@@ -76,27 +76,28 @@ class UserController extends Controller {
 
     async register() {
         try {
-            usersSchema.required = ["name", "type", "age", "gender", "address", "city", "breed", "matched", ]
+            usersSchema.required = ["name", "type", "age", "gender", "address", "city", "breed", "isMatched",]
             this.validate()
-            
+
             const result = await this.add(this.body)
             return result
         } catch (err) { throw err }
-    }}
+    }
+}
 
-    // async login() {
-    //     petsSchema.required = ["name", "type", "gender", "address", "city", "matched"]
-    //     this.validate()
+// async login() {
+//     petsSchema.required = ["name", "type", "gender", "address", "city", "isMatched"]
+//     this.validate()
 
-    //     let result = await this.get({ email: this.body.email })
+//     let result = await this.get({ email: this.body.email })
 
-    //     if (!result)
-    //         throw new CustomError(404, "ER_UNAVAILABLE", "Data not Found", "User unavailable")
+//     if (!result)
+//         throw new CustomError(404, "ER_UNAVAILABLE", "Data not Found", "User unavailable")
 
-    //     result.token = jwt.sign({ id: result.id }, jwtConfig.secret, jwtConfig.options)
+//     result.token = jwt.sign({ id: result.id }, jwtConfig.secret, jwtConfig.options)
 
-    //     return result
-    // }
+//     return result
+// }
 
 //     async update(id) {
 //         try {

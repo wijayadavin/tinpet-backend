@@ -14,7 +14,7 @@ const Pets = db.define(
         address: { type: Sequelize.STRING, allowNull: false },
         city: { type: Sequelize.STRING, allowNull: false },
         breed: { type: Sequelize.STRING },
-        matched: { type: Sequelize.STRING, allowNull: false, defaultValue: "available" }
+        isMatched: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false }
     },
     {
         ...basicModel.options
