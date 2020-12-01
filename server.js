@@ -43,6 +43,18 @@ app.use((req, res, next) => {
   next()
 })
 
+// Solve folder for uploads:
+fs.readdir(path.resolve(), (err, files) => {
+  if (err) {
+    console.log(err);
+  } else {
+    if (!files.includes('uploads')) {
+      fs.mkdir(path.resolve('uploads'), (err) => 1)
+    }
+  }
+})
+
+
 // Using the CORS package:
 // const cors = require('cors')
 // const cookieSession = require('cookie-session')
