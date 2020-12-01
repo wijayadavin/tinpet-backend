@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../../../middleware/auth')
-const routeErrorHandler = require('../../../../middleware/errorHandler')
-const Controller = require('../../../../controller/dbController')
-const nodemailer = require('nodemailer')
-const nodemailerConfig = require('../../../../configs/nodemailerConfig')
+const auth = require('../../../middleware/auth')
+const routeErrorHandler = require('../../../middleware/errorHandler')
+const Controller = require('../../../controller/dbController')
+const nodemailerConfig = require('../../../configs/nodemailerConfig')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
@@ -46,12 +45,19 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             const result3 = await new Controller('userNotifications').add(recipientNotif)
 
 
+            // cari chatId:
+            const foundChatId =
+
             // kirim chatLine baru ke responder:
-            const result4 = await new Controller('chatLines').add()
+            const result4 = await new Controller('chatLines').add({
+                chatId: foundChatId || ,
+                userId: req.user.id,
+                text: req.body.text
+            })
 
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
-            let mailOptions = {
+            const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
                 to: 'wijayadavin@gmail.com',
                 subject: '🐱 You received a new meeting request in TinPet!',
