@@ -4,6 +4,7 @@ const auth = require('../../../middleware/auth')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const Controller = require('../../../controller/dbController')
 const nodemailerConfig = require('../../../configs/nodemailerConfig')
+const searchArrayOfObjects = require('../../../helper/searchArrayOfObjects')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
@@ -46,17 +47,53 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
 
             // cari chatId:
-            const sender = await new Controller('userNotifications').get({
-                userId1: req.user.id,
+            let senderChatList1 = await new Controller('userChats').get({
+                userId1: req.user.id
+            })
+
+            let senderChatList2 = await new Controller('userChats').get({
                 userId2: req.user.id
             })
 
-            // kirim chatLine baru ke responder:
-            const result4 = await new Controller('chatLines').add({
-                chatId: foundChatId,
-                userId: req.user.id,
-                text: req.body.text
-            })
+
+            // if some values inside chat object has recipient user id, choose that chat id:
+            let foundChat = 0
+            let result4 = {}
+            let senderChatList = {
+                ...senderChatList1,
+                ...senderChatList2
+            }
+
+            if (senderChatList) {
+                if (typeof senderChatList != 'array') {
+                    senderChatList = [senderChatList]
+                }
+                if (senderChatList.length) {
+                    foundChat = searchArrayOfObjects(foundRecipientPet.userId, senderChatList)
+                }
+            }
+
+
+            if (foundChat) {
+                // kirim chatLine baru ke responder:
+                result4 = await new Controller('userChatLines').add({
+                    userChatId: foundChat.id,
+                    userId: req.user.id,
+                    text: req.body.text
+                })
+            } else {
+                // buat chat baru:
+                const newChat = await new Controller('userChats').add({
+                    userId1: req.user.id,
+                    userId2: foundRecipientPet.userId
+                })
+                // kirim chatLine baru ke responder:
+                result4 = await new Controller('userChatLines').add({
+                    userChatId: newChat.id,
+                    userId: req.user.id,
+                    text: req.body.text
+                })
+            }
 
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
@@ -68,9 +105,9 @@ router.post('/pet/meeting', // --> menghasilkan req.body
                 <h1>
                     Hi! Your pet named ${foundRecipientPet.name} has received a meeting request!
                 </h1>
-                <p>
+                <h3>
                     Please go to this <a href="${recipientNotif.url}">link</a> to respond the request:
-                </p>
+                </h3>
                 `
             }
 
@@ -95,6 +132,7 @@ router.post('/pet/meeting', // --> menghasilkan req.body
                     result: result1,
                     senderNotif: result2,
                     recipientNotif: result3,
+                    chatlines: result4,
                     recipientEmailNotif: null
                 })
             }
