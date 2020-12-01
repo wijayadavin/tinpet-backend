@@ -25,7 +25,7 @@ const usersSchema = {
         },
         "mobileNumber": {
             "type": "string",
-            "pattern": "^\\+[0-9]{9,12}$"
+            "pattern": "^\\+62[0-9]{9,12}$"
         }
     }
 }

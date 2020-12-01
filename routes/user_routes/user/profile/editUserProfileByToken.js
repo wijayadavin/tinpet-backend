@@ -16,7 +16,7 @@ router.patch('/user/profile',
                 // result2 = edit data petImage di database:
                 const foundUserImage = await new Controller('users').get({ id: req.user.id })
                 const result2 = await new Controller('users')
-                    .edit(foundUserImage.id, { url: `http://${process.env.BASE_URL}/file/${req.file.filename}` })
+                    .edit(foundUserImage.id, { url: `${process.env.BASE_URL}/file/${req.file.filename}` })
 
                 res.send({ pet: result1, petImage: result2 })
             } else {

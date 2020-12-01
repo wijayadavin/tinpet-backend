@@ -18,7 +18,7 @@ app.patch('/pet/:petId',
                 // result2 = memasukan data petImage ke database:
                 const foundPetImage = await new Controller('petImages').get({ petId: req.params.petId })
                 const result2 = await new Controller('petImages')
-                    .edit(foundPetImage.id, { url: `http://${process.env.BASE_URL}/file/${req.file.filename}` })
+                    .edit(foundPetImage.id, { url: `${process.env.BASE_URL}/file/${req.file.filename}` })
 
                 res.send({ pet: result1, petImage: result2 })
             } else {
