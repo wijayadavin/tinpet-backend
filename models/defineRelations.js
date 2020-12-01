@@ -4,7 +4,8 @@ const UserImages = require('./UserImages');
 const UserNotifications = require('./UserNotifications');
 const Meetings = require('./Meetings');
 const PetImages = require('./PetImages');
-
+const UserChats = require('./UserChats');
+const UserChatLines = require('../models/UserChatLines')
 const defineRelations = () => {
     const fkOptions = (options) => ({
         ...options,
@@ -25,8 +26,18 @@ const defineRelations = () => {
     Meetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id' }))
 
     // userNotifications:
-    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
-    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'userId' }))
+    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
+    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'user_id' }))
+
+    // userChats:
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id1' }))
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id2' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id1' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id2' }))
+
+    // userChatLines:
+    UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'user_chat_id' }))
+    UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'user_chat_id' }))
 
     // petImages
     PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))

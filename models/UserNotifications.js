@@ -4,7 +4,7 @@ const basicModel = require('./basicModel')
 
 
 const UserNotifications = db.define(
-    "useNotifications",
+    "userNotifications",
     {
         ...basicModel.fields,
         text: { type: Sequelize.STRING, allowNull: false },
