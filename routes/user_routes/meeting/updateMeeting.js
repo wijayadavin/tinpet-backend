@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const router = express.Router()
-const auth = require('../../../../middleware/auth')
-const routeErrorHandler = require('../../../../middleware/errorHandler')
+const auth = require('../../../middleware/auth')
+const routeErrorHandler = require('../../../middleware/errorHandler')
 
 
 // mengedit meeting berdasarkan meeting id (meetingId):

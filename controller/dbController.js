@@ -19,7 +19,7 @@ class Controller {
      */
     constructor(pluralTableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
-        this.model = getModel(pluralTableName).model
+        this.model = getModel(pluralTableName)
     }
 
 

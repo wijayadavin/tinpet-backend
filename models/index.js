@@ -16,8 +16,7 @@ module.exports = (tableName) => {
     let result = {}
     allModelPaths.forEach((modelFilePath) => {
         if (tableName == humps.depascalize(path.parse(modelFilePath).name)) {
-            result.model = require(`../${modelFilePath}`)
-            result.as = humps.camelize(tableName)
+            result = require(`../${modelFilePath}`)
         }
     })
     return result

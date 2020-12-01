@@ -5,16 +5,15 @@ const routeErrorHandler = require('../../../middleware/errorHandler')
 const auth = require('../../../middleware/auth')
 
 
-app.patch('/pet',
+app.delete('/user/:id',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-            const result = await new Controller('pets')
-                .edit(req.userId, req.body)
+            const result = await new Controller('chatlines')
+                .remove({ id: req.params.id })
             res.send(result)
         } catch (err) { next(err) }
     })
-
 
 app.use(routeErrorHandler)
 
