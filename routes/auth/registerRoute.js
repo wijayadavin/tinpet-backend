@@ -3,15 +3,16 @@ const app = express.Router()
 const routeErrorHandler = require('../../middleware/errorHandler')
 const Controller = require('../../controller/dbController')
 const UserController = require('../../controller/userController')
+const { userBodyParser, userResultParser } = require('../../helper/modelHelpers/user')
+
 
 app.post('/auth/register', async (req, res, next) => {
   try {
     // parse mobile number data:
-    req.body.mobileNumber = "+" + req.body.mobileNumber.replace(" ", "")
+    req.body = userBodyParser(req.body)
 
-    const result1 = await new UserController(req.body)
+    let result1 = await new UserController(req.body)
       .register()
-
 
     // result2 = memasukan data petImage ke database:
     const result2 = await new Controller('user_images')
@@ -20,8 +21,9 @@ app.post('/auth/register', async (req, res, next) => {
         url: `${process.env.BASE_URL}/file/default-user.jpg`
       })
 
-
-    res.send({ user: result1, userImage: result2 })
+    result1 = userResultParser(result1)
+    result1.imageUrl = result2.url
+    res.send(result1)
   } catch (err) { next(err) }
 })
 
