@@ -41,7 +41,7 @@ router.post('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan 
 
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
-                to: 'wijayadavin@gmail.com',
+                to: foundRecipientUser.email,
                 subject: `🐱 Your meeting request had changed to ${result1.status}!`,
                 html: `
                 <h1>

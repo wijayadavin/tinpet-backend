@@ -105,7 +105,7 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
 
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
-                to: 'wijayadavin@gmail.com',
+                to: foundRecipientUser.email,
                 subject: '🐱 You received a new meeting request in TinPet!',
                 html: `
                 <h1>
