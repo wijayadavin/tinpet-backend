@@ -18,9 +18,8 @@ function userResultParser(result) {
     }
     if (result.userImage) {
         result.imageUrl = result.userImage.url
+        delete result.userImage
     }
-
-    delete result.userImage
     delete result.password
     delete result.mobileNumber
     delete result.email

@@ -21,14 +21,13 @@ app.get('/pet',
             } delete result.isMatched
 
 
-            res.send(petResultParser(result))
+            res.send(result.map(petResultParser))
         } catch (err) { next(err) }
     })
 
 
 // get by id path:
 app.get('/pet/:id',
-    auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
             const result = await new Controller('pets')

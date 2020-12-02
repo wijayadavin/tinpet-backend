@@ -10,6 +10,13 @@ function petBodyParser(body) {
 
 // pet result parser:
 function petResultParser(result) {
+    if (result['dataValues']) {
+        result = result['dataValues']
+    }
+    if (result.petImage) {
+        result.imageUrl = result.petImage.url
+        delete result.petImage
+    }
     if (result.isMatched) {
         result.status = 'matched'
     } else {
