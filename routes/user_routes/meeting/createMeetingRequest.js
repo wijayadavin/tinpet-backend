@@ -115,27 +115,17 @@ router.post('/pet/meeting', // --> menghasilkan req.body
             const result5 = await nodemailerConfig.sendMail(mailOptions)
                 .catch(err => { next(err) })
 
-            // kalau berhasil, jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
-            if (result5) {
-                res.send({
-                    result: result1,
-                    senderNotif: result2,
-                    recipientNotif: result3,
-                    chatlines: result4,
-                    recipientEmailNotif: {
-                        messageSent: result5.messageId,
-                        ...mailOptions
-                    }
-                })
-            } else {
-                res.send({
-                    result: result1,
-                    senderNotif: result2,
-                    recipientNotif: result3,
-                    chatlines: result4,
-                    recipientEmailNotif: null
-                })
-            }
+            // Jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
+            res.send({
+                result: result1,
+                senderNotif: result2,
+                recipientNotif: result3,
+                chatLine: result4,
+                recipientEmailNotif: {
+                    messageSent: result5.messageId,
+                    ...mailOptions
+                }
+            })
         } catch (err) {
             next(err)
         }

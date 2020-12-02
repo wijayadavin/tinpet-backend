@@ -21,14 +21,14 @@ const defineRelations = () => {
     Users.hasMany(Pets, fkOptions({ foreignKey: 'userId' }))
 
     //PetLikes
-    PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'pet_id' }))
-    PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'user_id' }))
-    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'pet_id' }))
+    PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
+    PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
+    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'userId' }))
+    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'petId' }))
 
     // petMeetings:
-    Meetings.belongsTo(Users, fkOptions({ as: 'sender_user_id' }))
-    Meetings.belongsTo(Users, fkOptions({ as: 'recipient_user_id' }))
+    Meetings.belongsTo(Users, fkOptions({ as: 'senderUserId' }))
+    Meetings.belongsTo(Users, fkOptions({ as: 'recipientUserId' }))
 
     // petImages
     PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
@@ -39,18 +39,18 @@ const defineRelations = () => {
     Users.hasOne(UserImages, fkOptions({ foreignKey: 'userId' }))
 
     // userNotifications:
-    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'user_id' }))
-    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'user_id' }))
+    UserNotifications.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
+    Users.hasMany(UserNotifications, fkOptions({ foreignKey: 'userId' }))
 
     // userChats:
-    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id1' }))
-    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user_id2' }))
-    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id1' }))
-    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user_id2' }))
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user1Id' }))
+    UserChats.belongsTo(Users, fkOptions({ foreignKey: 'user2Id' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user1Id' }))
+    Users.hasMany(UserChats, fkOptions({ foreignKey: 'user2Id' }))
 
     // userChatLines:
-    UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'user_chat_id' }))
-    UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'user_chat_id' }))
+    UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'userChatId' }))
+    UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'userChatId' }))
 }
 
 
