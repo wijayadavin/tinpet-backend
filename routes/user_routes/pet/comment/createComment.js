@@ -1,16 +1,22 @@
 const express = require('express')
+const Controller = require('../../../../controller/dbController')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 // membuat comment baru:
-router.post('/pet/comment', // --> menghasilkan req.body
+router.post('/pet/:petId/comment', // --> menghasilkan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // result = buat comment baru berdasarkan comment id dan userId harus sama dengan recipientnya
+            const result = await new Controller('petComments').add({
+                userId: req.user.id,
+                petId: req.params.id,
+                text: req.body.text
+            })
 
-            // kalau berhasil, jalankan res.send(result)
+            // kalau berhasil, jalankan res.send(result)z
+            res.send(result)
         } catch (err) {
             next(err)
         }

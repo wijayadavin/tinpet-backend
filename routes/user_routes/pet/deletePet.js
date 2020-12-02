@@ -9,7 +9,7 @@ app.delete('/pet/:id',
   async (req, res, next) => {
     try {
       const result = await new Controller('pets')
-        .remove({ id: req.params.id })
+        .remove(req.params.id)
       res.send(result)
     } catch (err) { next(err) }
   })

@@ -6,7 +6,8 @@ const Meetings = require('./Meetings');
 const PetImages = require('./PetImages');
 const PetLikes = require('./PetLikes')
 const UserChats = require('./UserChats');
-const UserChatLines = require('../models/UserChatLines')
+const UserChatLines = require('../models/UserChatLines');
+const PetComments = require('./PetComments');
 
 
 const defineRelations = () => {
@@ -25,6 +26,12 @@ const defineRelations = () => {
     PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
     Users.hasMany(PetLikes, fkOptions({ foreignKey: 'userId' }))
     Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'petId' }))
+
+    //PetComments
+    PetComments.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
+    PetComments.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
+    Users.hasMany(PetComments, fkOptions({ foreignKey: 'userId' }))
+    Pets.hasMany(PetComments, fkOptions({ foreignKey: 'petId' }))
 
     // petMeetings:
     Meetings.belongsTo(Users, fkOptions({ as: 'senderUserId' }))

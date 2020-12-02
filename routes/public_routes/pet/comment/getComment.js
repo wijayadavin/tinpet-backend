@@ -1,17 +1,19 @@
 const express = require('express')
+const Controller = require('../../../../controller/dbController')
+const { petCommentResultParser } = require('../../../../helper/modelHelpers/petComment')
 const router = express.Router()
 const auth = require('../../../../middleware/auth')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
 
-
-// mengedit comment:
-router.post('/pet/comment', // --> menghasilkan req.body
+// membuat comment baru:
+router.get('/pet/:petId/comment', // --> menghasilkan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // result = edit comment berdasarkan comment id, dan userId harus sama dengan recipientnya
-
+            let result = await new Controller('petComments')
+                .getAllJoinLeft(['users'])
             // kalau berhasil, jalankan res.send(result)
+            res.send(result.map(petCommentResultParser))
         } catch (err) {
             next(err)
         }

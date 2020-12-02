@@ -5,7 +5,7 @@ const UserController = require('../../../../controller/userController')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
 const upload = require('../../../../middleware/uploadMiddleware')
 
-router.patch('/user/profile',
+router.patch('/profile',
     upload.single('file'),
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
@@ -18,7 +18,7 @@ router.patch('/user/profile',
                 const result2 = await new Controller('users')
                     .edit(foundUserImage.id, { url: `${process.env.BASE_URL}/file/${req.file.filename}` })
 
-                res.send({ pet: result1, petImage: result2 })
+                res.send({ user: result1, userImage: result2 })
             } else {
                 const result1 = await new UserController(req.body).update(req.user.id)
 

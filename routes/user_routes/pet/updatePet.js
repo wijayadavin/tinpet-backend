@@ -12,9 +12,7 @@ app.patch('/pet/:petId',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-
             req.body = petBodyParser(req.body)
-
 
             if (req.file) {
                 const result1 = await new Controller('pets')
