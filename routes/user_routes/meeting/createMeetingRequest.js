@@ -7,14 +7,18 @@ const nodemailerConfig = require('../../../configs/nodemailerConfig')
 const searchArrayOfObjects = require('../../../helper/searchArrayOfObjects')
 
 
-// mengirim meeting baru berdasarkan id pet penerima request (petId), dengan status requested:
-router.post('/pet/meeting', // --> menghasilkan req.body
+// mengirim meeting baru berdasarkan id pet penerima request (recipientPetId), dengan status requested:
+router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // foundRecipientPet = ambil data userId pada table 'pets' dengan { id: req.body.petId }:
-            const foundRecipientPet = await new Controller('pets').get({ id: req.body.petId })
-            delete req.body.petId
+            // foundRecipientPet = ambil data userId pada table 'pets' dengan { id: req.body.recipientPetId }:
+            if (req.params.recipientId) {
+                req.body.recipientPetId = req.params.recipientPetId
+            }
+
+            const foundRecipientPet = await new Controller('pets').get({ id: req.body.recipientPetId })
+            delete req.body.recipientPetId
 
             // merge body and hour ke dalam body dengan key 'time':
             req.body.time = await req.body.date + "T" + req.body.hour
@@ -97,13 +101,15 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
+            const foundRecipientUser = await new Controller('users').get({ id: foundRecipientPet.userId })
+
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
                 to: 'wijayadavin@gmail.com',
                 subject: '🐱 You received a new meeting request in TinPet!',
                 html: `
                 <h1>
-                    Hi! Your pet named ${foundRecipientPet.name} has received a meeting request!
+                    Howdy ${foundRecipientUser.name}! Your pet named ${foundRecipientPet.name} had received a meeting request!
                 </h1>
                 <h3>
                     Please go to this <a href="${recipientNotif.url}">link</a> to respond the request:
@@ -117,7 +123,7 @@ router.post('/pet/meeting', // --> menghasilkan req.body
 
             // Jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
             res.send({
-                result: result1,
+                meeting: result1,
                 senderNotif: result2,
                 recipientNotif: result3,
                 chatLine: result4,

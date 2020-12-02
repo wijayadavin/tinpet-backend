@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 
 // buat transporter object menggunakan SMTP Transport:
-let transporter = nodemailer.createTransport({
+let nodemailerConfig = nodemailer.createTransport({
     // settings for gmail:
     service: 'gmail',
     auth: {
@@ -13,4 +13,4 @@ let transporter = nodemailer.createTransport({
 })
 
 
-module.exports = transporter
+module.exports = nodemailerConfig
