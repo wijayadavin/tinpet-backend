@@ -76,6 +76,7 @@ class UserController extends Controller {
 
     async update(id) {
         try {
+            usersSchema.required = Object.keys(this.body)
             this.validate()
 
             if (this.body.email) {
