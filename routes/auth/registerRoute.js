@@ -21,7 +21,6 @@ app.post('/auth/register', async (req, res, next) => {
         url: `${process.env.BASE_URL}/file/default-user.jpg`
       })
 
-    result1 = userResultParser(result1)
     result1.imageUrl = result2.url
     res.send(result1)
   } catch (err) { next(err) }
