@@ -4,6 +4,7 @@ const auth = require('../../../../middleware/auth')
 const UserController = require('../../../../controller/userController')
 const routeErrorHandler = require('../../../../middleware/errorHandler')
 const upload = require('../../../../middleware/uploadMiddleware')
+const Controller = require('../../../../controller/dbController')
 
 router.patch('/profile',
     upload.single('file'),
@@ -20,8 +21,9 @@ router.patch('/profile',
 
                 res.send({ user: result1, userImage: result2 })
             } else {
-                const result1 = await new UserController(req.body).update(req.user.id)
-
+                let result1 = await new UserController(req.body).update(req.user.id)
+                const userImage = await new Controller('userImages').get({ userId: req.user.id })
+                result1.imageUrl = userImage['dataValues'].url
                 res.send(result1)
             }
         } catch (err) { next(err) }
