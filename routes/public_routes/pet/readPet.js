@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express.Router()
-const Controller = require('../../../controller/dbController')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const { petResultParser, petBodyParser } = require('../../../helper/modelHelpers/pet')
 const PetController = require('../../../controller/petController')

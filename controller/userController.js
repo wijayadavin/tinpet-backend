@@ -61,6 +61,7 @@ class UserController extends Controller {
         this.validate()
 
         let result = await this.get({ email: this.body.email })
+        result = result['dataValues']
 
         if (!result)
             throw new CustomError(404, "ER_UNAVAILABLE", "Data not Found", "User unavailable")
