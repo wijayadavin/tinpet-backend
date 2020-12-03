@@ -72,7 +72,6 @@ class Controller {
         // jadikan class model sequelize:
         joinedTableNames = joinedTableNames.map(getModel)
 
-        console.log(typeof joinedTableNames);
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findOne({
             // where: searchParameters,

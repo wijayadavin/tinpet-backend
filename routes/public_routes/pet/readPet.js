@@ -2,25 +2,26 @@ const express = require('express')
 const app = express.Router()
 const Controller = require('../../../controller/dbController')
 const routeErrorHandler = require('../../../middleware/errorHandler')
-const auth = require('../../../middleware/auth')
-const { petResultParser } = require('../../../helper/modelHelpers/pet')
+const { petResultParser, petBodyParser } = require('../../../helper/modelHelpers/pet')
+const PetController = require('../../../controller/petController')
 
 
-// get all:
+// get all or by query:
 app.get('/pet',
     async (req, res, next) => {
         try {
-            const result = await new Controller('pets')
-                .getAllJoinLeft('petImages')
-
-            // output data preprocessing:
-            if (result.isMatched) {
-                result.status = 'matched'
-            } else {
-                result.status = 'available'
-            } delete result.isMatched
+            if (req.query.type || req.query.city) {
+                const result = await new PetController(
+                    petBodyParser(req.query)
+                ).filter()
 
 
+                return res.send(result.map(petResultParser))
+            }
+            const result = await new PetController('pets')
+                .getAll()
+
+            // output & data preprocessing:
             res.send(result.map(petResultParser))
         } catch (err) { next(err) }
     })
@@ -30,10 +31,10 @@ app.get('/pet',
 app.get('/pet/:id',
     async (req, res, next) => {
         try {
-            const result = await new Controller('pets')
-                .getJoinLeft({ id: req.params.id }, 'petImages')
+            const result = await new PetController({ id: req.params.id })
+                .getDetailed()
 
-
+            // output & data preprocessing:
             res.send(petResultParser(result))
         } catch (err) { next(err) }
     })
