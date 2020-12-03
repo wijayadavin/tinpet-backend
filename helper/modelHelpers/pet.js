@@ -20,10 +20,13 @@ function petResultParser(result) {
         delete result.petImage
     }
     // parse matched status:
-    if (result.isMatched) {
+    if (result.isMatched === true) {
         result.status = 'matched'
-    } else {
+    } else if (result.isMatched === false) {
         result.status = 'available'
+    }
+    else {
+        result.status = null
     } delete result.isMatched
 
     // parse like and comment counts:

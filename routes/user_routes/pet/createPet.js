@@ -14,9 +14,6 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
     try {
       req.body.userId = req.user.id // <-- cara memasukkan user ID dari req.user.id ke body.userId
 
-      // input data preprocessing:
-      req.body = petBodyParser(req.body)
-
       // result1 = memasukkan data pet baru ke database:
       const result1 = await new Controller('pets')
         //                                ^ class Controller untuk menjalankan sequelize pada table 'pets'
