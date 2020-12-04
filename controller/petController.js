@@ -1,5 +1,6 @@
 const Controller = require("./dbController");
-const getModel = require('../models')
+const getModel = require('../models');
+const Sequelize = require('sequelize');
 
 // const petsSchema = {
 //     "description": "pet registration validation",
@@ -59,7 +60,41 @@ const getModel = require('../models')
 //     }
 // }
 
-const petAttributes = ['id', 'name', 'userId', 'isMatched']
+const petAttributes = [
+    'id',
+    'name',
+    'userId',
+    'isMatched',
+    [Sequelize.fn("COUNT", Sequelize.col("like.id")), "likeCount"],
+    [Sequelize.fn("COUNT", Sequelize.col("comment.id")), "commentCount"]
+]
+
+const petIncludes = [
+    {
+        model: getModel('pet_images')
+    },
+    {
+        as: "like",
+        model: getModel('pet_likes'),
+        attribute: [],
+    },
+    {
+        as: "comment",
+        model: getModel('pet_comments'),
+        attribute: [],
+    },
+    {
+        as: "user",
+        model: getModel('users'),
+        attribute: [],
+        include: {
+            as: "userImage",
+            model: getModel('user_images'),
+            attribute: [],
+        }
+    }
+]
+
 class PetController extends Controller {
     constructor(searchParameters) {
         super('pets')
@@ -72,7 +107,8 @@ class PetController extends Controller {
                 .findAll({
                     attributes: petAttributes,
                     where: this.searchParameters,
-                    include: getModel('pet_images')
+                    include: petIncludes,
+                    group: ['pets.id']
                 })
             return result
         } catch (err) { throw err }
@@ -81,10 +117,14 @@ class PetController extends Controller {
     async getAll() {
         try {
             const result = await this.model
-                .findAll({
-                    attributes: petAttributes,
-                    include: getModel('pet_images')
-                })
+                .findAll(
+                    {
+                        include: petIncludes,
+                        attributes: petAttributes,
+                        group: ['pets.id']
+                    },
+
+                )
             return result
         } catch (err) { throw err }
     }
@@ -94,7 +134,9 @@ class PetController extends Controller {
             const result = await this.model
                 .findOne({
                     where: this.searchParameters,
-                    include: getModel('pet_images')
+                    include: petIncludes,
+                    attributes: petAttributes,
+                    group: ['pets.id']
                 })
             return result
         } catch (err) { throw err }

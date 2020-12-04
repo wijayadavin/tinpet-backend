@@ -24,14 +24,14 @@ const defineRelations = () => {
     //PetLikes
     PetLikes.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
     PetLikes.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
-    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'userId' }))
-    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'petId' }))
+    Users.hasMany(PetLikes, fkOptions({ foreignKey: 'userId', as: 'like' }))
+    Pets.hasMany(PetLikes, fkOptions({ foreignKey: 'petId', as: 'like' }))
 
     //PetComments
     PetComments.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
     PetComments.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
-    Users.hasMany(PetComments, fkOptions({ foreignKey: 'userId' }))
-    Pets.hasMany(PetComments, fkOptions({ foreignKey: 'petId' }))
+    Users.hasMany(PetComments, fkOptions({ foreignKey: 'userId', as: 'comment' }))
+    Pets.hasMany(PetComments, fkOptions({ foreignKey: 'petId', as: 'comment' }))
 
     // petMeetings:
     Meetings.belongsTo(Users, fkOptions({ foreignKey: 'senderUserId' }))
