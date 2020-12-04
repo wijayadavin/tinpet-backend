@@ -29,6 +29,13 @@ function petResultParser(result) {
         result.status = null
     } delete result.isMatched
 
+    result.userImageUrl = result.user.userImage.url
+    result.userFullName = result.user.name
+
+    delete result.like
+    delete result.comment
+    delete result.user
+
     // parse like and comment counts:
 
 
