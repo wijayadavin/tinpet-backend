@@ -9,7 +9,7 @@ const routeErrorHandler = require('../../../middleware/errorHandler')
 
 
 // mengedit meeting berdasarkan meeting id (meetingId):
-router.post('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan req.body
+router.patch('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan req.body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
