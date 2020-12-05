@@ -84,7 +84,7 @@ filePaths.forEach((filePath) => {
   app.use(route)
 })
 
-
+console.log(process.env)
 const port = process.env.PORT
 app.listen(port, () => {
   console.log(`

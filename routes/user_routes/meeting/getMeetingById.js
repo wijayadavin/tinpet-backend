@@ -10,7 +10,6 @@ router.get('/meeting/', // --> tidak menghasilkan query, params ataupun body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            console.log([process.env.EMAIL, process.env.PASSWORD])
             const result1 = await new Controller('meetings')
                 .get({ senderUserId: req.user.id })
 
