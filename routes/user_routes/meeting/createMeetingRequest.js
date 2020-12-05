@@ -35,7 +35,7 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             const senderNotif = {
                 userId: req.user.id,
                 text: "Your meeting request has been sent",
-                url: `${process.env.BASE_URL}/pet-meeting/${result1.id}`,
+                url: `${process.env.BASE_URL}/meeting/${result1.id}`,
             }
 
             // siapkan data notif untuk recipient user:
@@ -111,9 +111,6 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
                 <h1>
                     Howdy ${foundRecipientUser.name}! Your pet named ${foundRecipientPet.name} had received a meeting request!
                 </h1>
-                <h3>
-                    Please go to this <a href="${recipientNotif.url}">link</a> to respond the request:
-                </h3>
                 `
             }
 

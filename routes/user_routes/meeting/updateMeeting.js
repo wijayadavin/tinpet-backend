@@ -20,7 +20,7 @@ router.post('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan 
             const senderNotif = {
                 userId: req.user.id,
                 text: `Your meeting request status had changed to ${result1.status}`,
-                url: `${process.env.BASE_URL}/pet-meeting/${req.params.meetingId}`,
+                url: `${process.env.BASE_URL}/meeting/${req.params.meetingId}`,
             }
 
             // siapkan data notif untuk recipient user:
@@ -46,9 +46,6 @@ router.post('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan 
                 <h1>
                    Howdy ${foundRecipientUser.name}! Your meeting request status had changed to ${result1.status}.
                 </h1>
-                <h3>
-                    Please go to this <a href="${recipientNotif.url}">link</a> to respond the request:
-                </h3>
                 `
             }
 
