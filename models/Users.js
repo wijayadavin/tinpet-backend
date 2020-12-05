@@ -9,7 +9,7 @@ const Users = db.define(
     {
         ...basicModel.fields,
         name: { type: Sequelize.STRING, allowNull: false },
-        email: { type: Sequelize.STRING, allowNull: false },
+        email: { type: Sequelize.STRING, unique: true, allowNull: false },
         password: { type: Sequelize.STRING, allowNull: false },
         mobileNumber: { type: Sequelize.STRING, allowNull: false }
     },
