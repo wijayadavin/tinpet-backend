@@ -13,6 +13,7 @@ const PetComments = require('./PetComments');
 const defineRelations = () => {
     const fkOptions = (options) => ({
         ...options,
+        foreignKey: { allowNull: false },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
