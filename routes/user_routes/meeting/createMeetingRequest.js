@@ -4,7 +4,8 @@ const auth = require('../../../middleware/auth')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const Controller = require('../../../controller/dbController')
 const nodemailerConfig = require('../../../configs/nodemailerConfig')
-const searchArrayOfObjects = require('../../../helper/searchArrayOfObjects')
+const CustomError = require('../../../helper/customErrorHelper')
+const chatSenderHelper = require('../../../helper/chatSenderHelper')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (recipientPetId), dengan status requested:
@@ -12,24 +13,42 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            // foundRecipientPet = ambil data userId pada table 'pets' dengan { id: req.body.recipientPetId }:
-            if (req.params.recipientId) {
+            // apabila menggunakan path parameter, maka masukan data tersebut ke body sebagai recipient (penerima):
+            if (req.params.recipientPetId) {
                 req.body.recipientPetId = req.params.recipientPetId
             }
 
-            const foundRecipientPet = await new Controller('pets').get({ id: req.body.recipientPetId })
-            delete req.body.recipientPetId
-
-            // merge body and hour ke dalam body dengan key 'time':
+            // merge body & hour ke dalam body dengan key 'time':
             req.body.time = await req.body.date + "T" + req.body.hour
             delete req.body.date
             delete req.body.hour
 
-            // masukan UserId penerima (recipient) ke body:
-            req.body.recipientId = req.user.id
+            // masukan UserId pengirim (sender) ke body:
+            req.body.senderUserId = req.user.id
+
+            // jika tidak ada data sender pet, maka ambil salah satu pet milik sender user:
+            if (!req.body.senderPetId) {
+                const foundSenderPet = await new Controller('pets').get({ userId: req.user.id })
+                if (!foundSenderPet) {
+                    next(new CustomError(
+                        404,
+                        "ER_SENDER_PET_NOT_FOUND",
+                        "Error not found",
+                        "The sender's pet was not found, please create a pet first"
+                    ))
+                }
+                req.body.senderPetId = foundSenderPet.id
+            }
+
+            // cari data recipient pet (penerima):
+            const foundRecipientPet = await new Controller('pets').get({ id: req.body.recipientPetId })
+
+            // masukan recipient user id ke dalam body:
+            req.body.recipientUserId = foundRecipientPet.userId
 
             // create data baru di table meetings:
             const result1 = await new Controller('meetings').add(req.body)
+
 
             // siapkan data notif untuk sender user:
             const senderNotif = {
@@ -50,54 +69,8 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             const result3 = await new Controller('userNotifications').add(recipientNotif)
 
 
-            // cari chatId:
-            let senderChatList1 = await new Controller('userChats').get({
-                user1Id: req.user.id
-            })
-
-            let senderChatList2 = await new Controller('userChats').get({
-                user2Id: req.user.id
-            })
-
-
-            // if some values inside chat object has recipient user id, choose that chat id:
-            let foundChat = 0
-            let result4 = {}
-            let senderChatList = {
-                ...senderChatList1,
-                ...senderChatList2
-            }
-
-            if (senderChatList) {
-                if (typeof senderChatList != 'array') {
-                    senderChatList = [senderChatList]
-                }
-                if (senderChatList.length) {
-                    foundChat = searchArrayOfObjects(foundRecipientPet.userId, senderChatList)
-                }
-            }
-
-
-            if (foundChat) {
-                // kirim chatLine baru ke responder:
-                result4 = await new Controller('userChatLines').add({
-                    userChatId: foundChat.id,
-                    userId: req.user.id,
-                    text: req.body.text
-                })
-            } else {
-                // buat chat baru:
-                const newChat = await new Controller('userChats').add({
-                    user1Id: req.user.id,
-                    user2Id: foundRecipientPet.userId
-                })
-                // kirim chatLine baru ke responder:
-                result4 = await new Controller('userChatLines').add({
-                    userChatId: newChat.id,
-                    userId: req.user.id,
-                    text: req.body.text
-                })
-            }
+            // kirim chat ke penerima meeting request:
+            const result4 = await chatSenderHelper(req.user.id, foundRecipientPet.userId, req.body.text)
 
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
