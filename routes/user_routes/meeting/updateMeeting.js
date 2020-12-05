@@ -14,7 +14,6 @@ router.post('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan 
     async (req, res, next) => {
         try {
             // foundMeeting = get meeting by req.params.meetingId
-
             const result1 = await new Controller('meetings').edit(req.params.meetingId, req.body)
 
             // siapkan data notif untuk sender user:
