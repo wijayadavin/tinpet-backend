@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 let nodemailerConfig = nodemailer.createTransport({
     // settings for gmail:
     service: 'gmail',
+    secure: true,
     auth: {
         user: process.env.EMAIL, // gmail email
         pass: process.env.PASSWORD // account password
