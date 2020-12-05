@@ -64,7 +64,9 @@ const defineRelations = () => {
 
     // userChatLines:
     UserChatLines.belongsTo(UserChats, fkOptions({ foreignKey: 'userChatId' }))
+    UserChatLines.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
     UserChats.hasMany(UserChatLines, fkOptions({ foreignKey: 'userChatId' }))
+    Users.hasMany(UserChatLines, fkOptions({ foreignKey: 'userId' }))
 }
 
 
