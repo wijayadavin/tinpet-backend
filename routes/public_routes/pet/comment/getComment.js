@@ -7,7 +7,6 @@ const routeErrorHandler = require('../../../../middleware/errorHandler')
 
 // membuat comment baru:
 router.get('/pet/:petId/comment', // --> menghasilkan req.body
-    auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
             let result = await new Controller('petComments')
