@@ -46,10 +46,8 @@ const defineRelations = () => {
 
     // petImages
     PetImages.belongsTo(Pets, fkOptions({ foreignKey: 'petId' }))
-    Pets.hasOne(PetImages, fkOptions({ foreignKey: 'petId' }))
-
-    // userImages:
     UserImages.belongsTo(Users, fkOptions({ foreignKey: 'userId' }))
+    Pets.hasOne(PetImages, fkOptions({ foreignKey: 'petId' }))
     Users.hasOne(UserImages, fkOptions({ foreignKey: 'userId' }))
 
     // userNotifications:

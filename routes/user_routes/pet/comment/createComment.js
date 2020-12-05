@@ -11,7 +11,7 @@ router.post('/pet/:petId/comment', // --> menghasilkan req.body
         try {
             const result = await new Controller('petComments').add({
                 userId: req.user.id,
-                petId: req.params.id,
+                petId: req.params.petId,
                 text: req.body.text
             })
 
