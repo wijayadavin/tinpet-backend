@@ -5,12 +5,12 @@ const nodemailer = require('nodemailer')
 let nodemailerConfig = nodemailer.createTransport({
     // settings for gmail:
     service: 'gmail',
-    secure: true,
+    // secure: true,
     auth: {
         user: process.env.EMAIL, // gmail email
         pass: process.env.PASSWORD // account password
     },
-    tls: { rejectUnauthorized: false } //option tambahan untuk testing di localhost
+    // tls: { rejectUnauthorized: false } //option tambahan untuk testing di localhost
 })
 
 
