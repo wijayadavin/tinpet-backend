@@ -25,7 +25,7 @@ router.patch('/meeting/:meetingId', // --> menghasilkan req.params.meetingId dan
 
             // siapkan data notif untuk recipient user:
             const recipientNotif = {
-                userId: foundRecipientPet.userId,
+                userId: result1.recipientUserId,
                 text: `You have changed a meeting request status to ${req.result1.status}`,
                 url: senderNotif.url,
             }
