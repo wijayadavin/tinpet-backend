@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         const name = file.originalname;
         const splittedFileName = name.split('.')
         if (splittedFileName.length > 2) {
-            console.log("Nama File ada Titiknya");
+
         } else {
             splittedFileName[0] = shortid.generate()
             const joinedFileName = splittedFileName.join('.')
@@ -24,8 +24,8 @@ const upload = multer({
     fileFilter: function (req, file, cb) {
         const name = file.originalname
         const splittedName = name.split('.')
-        console.log(splittedName);
-        if (splittedName[1] !== 'jpg') {
+
+        if (splittedName[1] !== 'jpg' && splittedName[1] !== 'png') {
             return cb(new Error('image only'))
         } else {
             cb(null, true)
