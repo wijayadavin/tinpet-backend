@@ -3,21 +3,33 @@ const CustomError = require('../helper/customErrorHelper');
 
 
 function routeErrorHandler(err, req, res, next) {
-  const errorCodes = [_.toPlainObject(err).code, err, err.code]
-
-  if (errorCodes.some((err) => err === 'ER_INVALID_FORMAT'))
+  let errorCode
+  if (err['parent']) {
+    errorCode = err['parent'].code
+    err = err['parent']
+  }
+  if (err.code) {
+    errorCode = err.code
+  }
+  if (err.name === "SequelizeValidationError") {
+    err = err.errors[0]
+    err.code = 400
+    err.name = "ER_INVALID_FORMAT"
+    errorCode = err.name
+  }
+  if (errorCode === 'ER_INVALID_FORMAT')
     return res.status(400).send(err)
 
-  if (errorCodes.some((err) => err === 'ER_BAD_FIELD_ERROR'))
+  if (errorCode === 'ER_BAD_FIELD_ERROR')
     return res.status(400).send(err)
 
-  if (errorCodes.some((err) => err === 'ER_DATA_TOO_LONG'))
+  if (errorCode === 'ER_DATA_TOO_LONG')
     return res.status(400).send(err);
 
-  if (errorCodes.some((err) => err === 'ER_NOT_FOUND'))
+  if (errorCode === 'ER_NOT_FOUND')
     return res.status(404).send(err);
 
-  if (errorCodes.some((err) => err === 'ER_DUP_ENTRY'))
+  if (errorCode === 'ER_DUP_ENTRY')
     return res.status(409).send(err);
 
   else {

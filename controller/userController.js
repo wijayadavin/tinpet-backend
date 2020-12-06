@@ -13,11 +13,11 @@ const usersSchema = {
         "name": {
             "type": "string",
             "minLength": 2,
-            "maxLength": 50
+            "maxLength": 25
         },
         "email": {
             "type": "string",
-            "format": "email"
+            "pattern": "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
         },
         "password": {
             "type": "string",
@@ -25,7 +25,7 @@ const usersSchema = {
         },
         "mobileNumber": {
             "type": "string",
-            "pattern": "^\\+62[0-9]{9,12}$"
+            "pattern": "^\\+62[0-9]{9,15}$"
         }
     }
 }

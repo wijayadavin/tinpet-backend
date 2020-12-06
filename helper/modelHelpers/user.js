@@ -1,13 +1,21 @@
 // pet body parser:
 function userBodyParser(body) {
-    if (body.mobileNumber[0] === '+') {
-        body.mobileNumber = body.mobileNumber.replace(" ", "")
-        body.mobileNumber = body.mobileNumber.replace("-", "")
-        return body
-    } else {
-        body.mobileNumber = "+" + body.mobileNumber.replace(" ", "")
-        body.mobileNumber = body.mobileNumber.replace("-", "")
-        return body
+    if (body.mobileNumber) {
+        if (body.mobileNumber[0] === '+') {
+            body.mobileNumber = body.mobileNumber.replace(" ", "")
+            body.mobileNumber = body.mobileNumber.replace("-", "")
+            return body
+        } else if (body.mobileNumber[0] === '0') {
+            body.mobileNumber = body.mobileNumber.substring(1)
+            body.mobileNumber = "+62" + body.mobileNumber.replace(" ", "")
+            body.mobileNumber = body.mobileNumber.replace("-", "")
+            return body
+        }
+        else {
+            body.mobileNumber = "+" + body.mobileNumber.replace(" ", "")
+            body.mobileNumber = body.mobileNumber.replace("-", "")
+            return body
+        }
     }
 }
 
