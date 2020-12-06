@@ -33,7 +33,12 @@ app.get('/user/:id', async (req, res, next) => {
 
             return res.send(userResultParser(result))
         }
-        next(new CustomError(404, "ER_NOT_FOUND", "Not found", "The user id was not found"))
+        next(new CustomError(
+            404,
+            "ER_NOT_FOUND",
+            "Not found",
+            "The user id was not found"
+        ))
     } catch (err) {
         next(err)
     }

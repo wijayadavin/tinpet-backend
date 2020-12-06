@@ -73,16 +73,32 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
         }
       }
 
+      // cari user di database:
+      let foundUser = await new Controller('users').get({ id: req.user.id })
 
-      req.body.userId = req.user.id // <-- cara memasukkan user ID dari req.user.id ke body.userId
+      if (foundUser) {
+        foundUser = foundUser['dataValues']
+        req.body.userId = req.user.id
+        // apabila tidak memasukan location, pakai location milik user:
+        if (!('address' in req.body) && 'address' in foundUser)
+          req.body.address = foundUser.address
+        // apabila tidak memasukan city, pakai city milik user:
+        if (!('city' in req.body) && 'city' in foundUser)
+          req.body.city = foundUser.city
+      } else {
+        // apabila user tidak ditemukan maka kirim error:
+        next(new CustomError(
+          404,
+          "ER_NOT_FOUND",
+          "Error not found",
+          "The user id was not found in the database."
+        ))
+      }
+
 
       // result1 = memasukkan data pet baru ke database:
-      const result1 = await new Controller('pets')
-        //                                ^ class Controller untuk menjalankan sequelize pada table 'pets'
-        //                    ^ class baru
+      const result1 = await new Controller('pets') // < -- class Controller untuk menjalankan sequelize pada table 'pets'
         .add(req.body) // <-- body (data yang mau dimasukan dari request)
-      //    ^req atau request adalah data yang dimasukkan dari postman.
-
 
       // apabila user mengupload Image, maka gunakan image:
       let petImageData = {}
@@ -90,6 +106,7 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
       if (req.file) {
         petImageData.url = `${process.env.BASE_URL}/file/${req.file.filename}`
       } else {
+        // apabila tidak ada, maka gunakan image kosong:
         petImageData.url = `${process.env.BASE_URL}/file/default-pet.jpg`
       }
 
