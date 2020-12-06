@@ -96,9 +96,11 @@ const petIncludes = [
 ]
 
 class PetController extends Controller {
-    constructor(searchParameters) {
+    constructor(searchParameters, page, limit) {
         super('pets')
         this.searchParameters = searchParameters
+        this.page = page
+        this.limit = limit
     }
 
     async filter() {
@@ -108,7 +110,10 @@ class PetController extends Controller {
                     attributes: petAttributes,
                     where: this.searchParameters,
                     include: petIncludes,
-                    group: ['pets.id']
+                    group: ['pets.id'],
+                    limit: this.limit,
+                    offset: (this.page - 1) * this.limit,
+                    subQuery: false
                 })
             return result
         } catch (err) { throw err }
@@ -121,7 +126,7 @@ class PetController extends Controller {
                     {
                         include: petIncludes,
                         attributes: petAttributes,
-                        group: ['pets.id']
+                        group: ['pets.id'],
                     },
 
                 )

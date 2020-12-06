@@ -36,7 +36,14 @@ function userResultParser(result) {
         delete result.email
         return result
     }
-    throw new CustomError(404, "ER_NOT_FOUND", "Not found", "The user id was not found")
+
+
+    throw new CustomError(
+        404,
+        "ER_NOT_FOUND",
+        "Not found",
+        "The requested user id was not found"
+    )
 }
 
 module.exports = {

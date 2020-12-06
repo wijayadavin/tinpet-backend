@@ -7,6 +7,9 @@ function routeErrorHandler(err, req, res, next) {
   if (err['parent']) {
     errorCode = err['parent'].code
     err = err['parent']
+    if (err.sql) {
+      delete err.sql
+    }
   }
   if (err.code) {
     errorCode = err.code
