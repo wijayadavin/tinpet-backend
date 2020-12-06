@@ -74,7 +74,7 @@ class Controller {
 
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findOne({
-            // where: searchParameters,
+            where: searchParameters,
             include: [
                 ...joinedTableNames
             ]

@@ -61,13 +61,12 @@ class UserController extends Controller {
         this.validate()
 
         let result = await this.get({ email: this.body.email })
+        if (!result)
+            throw new CustomError(404, "ER_UNAVAILABLE", "Data not Found", "The user email was not found in the database")
         result = result['dataValues']
 
-        if (!result)
-            throw new CustomError(404, "ER_UNAVAILABLE", "Data not Found", "User unavailable")
-
         if (!(await checkPassword(this.body.password, result.password)))
-            throw new CustomError(400, "ER_CREDENTIALS", "Wrong credentials", "Email and password do not match")
+            throw new CustomError(401, "ER_CREDENTIALS", "Wrong credentials", "Email and password do not match")
 
         result.token = jwt.sign({ id: result.id }, jwtConfig.secret, jwtConfig.options)
 
