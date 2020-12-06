@@ -14,12 +14,23 @@ function routeErrorHandler(err, req, res, next) {
   if (err.code) {
     errorCode = err.code
   }
+  if (err.response) {
+    if (err.response.data.message === 'Classifcation failed: correct animal not found.') {
+      return res.status(400).send(new CustomError(400,
+        "ER_BAD_REQUEST",
+        "Invalid pet image",
+        "Please upload an image consisting of a dog or cat")
+      )
+    }
+  }
   if (err.name === "SequelizeValidationError") {
     err = err.errors[0]
     err.code = 400
     err.name = "ER_INVALID_FORMAT"
     errorCode = err.name
   }
+
+
   if (errorCode === 'ER_INVALID_FORMAT')
     return res.status(400).send(err)
 
