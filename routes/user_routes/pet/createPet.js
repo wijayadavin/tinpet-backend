@@ -26,8 +26,19 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
       let uploadedPetImage
       let result3 // <-- hasil prediksi gambar pet
 
+      // pastikan data type ada di body:
+      if (!('type' in req.body)) {
+        next(new CustomError(
+          400,
+          "ER_INVALID_FORMAT",
+          "Error invalid format",
+          "pet.type data is needed in body"
+        ))
+      }
+      req.body.type = req.body.type.toLowerCase()
+
       // kalau user memasukan gambar pet, maka analisa gambar pet teresebut:
-      if (!_.isEmpty(req.file)) {
+      if (!_.isEmpty(req.file) && req.body.type === 'cat') {
         imageData.append('file', fs.createReadStream(req.file.path));
         uploadedPetImage = await axios(petUploadConfig(imageData))
           .then(response => {

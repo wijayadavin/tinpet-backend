@@ -19,7 +19,7 @@ function routeErrorHandler(err, req, res, next) {
       return res.status(400).send(new CustomError(400,
         "ER_BAD_REQUEST",
         "Invalid pet image",
-        "Please upload an image consisting of a dog or cat")
+        "Please upload an image consisting of a cat or dog")
       )
     }
   }
