@@ -65,6 +65,7 @@ const petAttributes = [
     'name',
     'userId',
     'isMatched',
+    'createdAt',
     [Sequelize.fn("COUNT", Sequelize.col("like.id")), "likeCount"],
     [Sequelize.fn("COUNT", Sequelize.col("comment.id")), "commentCount"]
 ]
@@ -113,7 +114,8 @@ class PetController extends Controller {
                     group: ['pets.id'],
                     limit: this.limit,
                     offset: (this.page - 1) * this.limit,
-                    subQuery: false
+                    subQuery: false,
+                    order: [['createdAt', 'DESC']]
                 })
             return result
         } catch (err) { throw err }
@@ -127,6 +129,7 @@ class PetController extends Controller {
                         include: petIncludes,
                         attributes: petAttributes,
                         group: ['pets.id'],
+                        order: [['createdAt', 'DESC']]
                     },
 
                 )
