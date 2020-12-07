@@ -1,5 +1,6 @@
 const searchArrayOfObjects = require("../searchArrayOfObjects")
 
+
 /**
  * 
  * @param {object} labels labels object
@@ -20,5 +21,6 @@ function petBreedHelper(labels, type) {
     const predictedBreed = searchArrayOfObjects(maxConfidence, labels)
     return predictedBreed.Name
 }
+
 
 module.exports = petBreedHelper
