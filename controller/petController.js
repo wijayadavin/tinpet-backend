@@ -97,7 +97,7 @@ const petIncludes = [
 ]
 
 class PetController extends Controller {
-    constructor(searchParameters, page, limit) {
+    constructor(searchParameters, page = 1, limit = 100) {
         super('pets')
         this.searchParameters = searchParameters
         this.page = page

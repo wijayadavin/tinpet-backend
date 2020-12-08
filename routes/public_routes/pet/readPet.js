@@ -13,26 +13,12 @@ app.get('/pet',
             if (!_.isEmpty(req.query)) {
                 // get filter parameters data from query:
                 let filterParameters = { ...req.query }
-                if (filterParameters.page) {
+                if (filterParameters.page)
                     delete filterParameters.page
-                }
-                if (filterParameters.limit) {
+
+                if (filterParameters.limit)
                     delete filterParameters.limit
-                }
 
-                // if not specify the page, page equal to 1:
-                if (!req.query.page) {
-                    req.query.page = parseInt(1)
-                } else {
-                    req.query.page = parseInt(req.query.page)
-                }
-
-                // if not specify the limit, limit equal to 100:
-                if (!req.query.limit) {
-                    req.query.limit = parseInt(100)
-                } else {
-                    req.query.limit = parseInt(req.query.limit)
-                }
 
                 // get the result
                 const result = await new PetController(

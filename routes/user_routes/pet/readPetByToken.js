@@ -11,7 +11,8 @@ app.get('/profile/pet',
     auth.authenticate('bearer', { session: false }),
     async (req, res, next) => {
         try {
-            const result = await new PetController({ userId: req.user.id })
+
+            const result = await new PetController({ userId: req.user.id }, req.query.page, req.query.limit)
                 .filter()
 
             // output & data preprocessing:
