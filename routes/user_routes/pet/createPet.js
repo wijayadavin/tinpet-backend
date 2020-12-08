@@ -7,24 +7,24 @@ const upload = require('../../../middleware/uploadMiddleware')
 const { petResultParser } = require('../../../helper/modelHelpers/pet')
 const _ = require('lodash')
 
+const axios = require('axios');
+const fs = require('fs');
+const petUploadConfig = require('../../../configs/axios/petUploadConfig')
+const FormData = require('form-data');
+const petAnalyzingConfig = require('../../../configs/axios/petAnalyzingConfig')
+const deleteAnalyzedDataConfig = require('../../../configs/axios/deleteAnalyzedDataConfig')
 const CustomError = require('../../../helper/customErrorHelper')
-const imageAnalysisHelper = require('../../../helper/pet/imageAnalysisHelper')
+const petBreedHelper = require('../../../helper/pet/petBreedHelper')
+const isCatHelper = require('../../../helper/pet/isCatHelper')
 
 app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/pet
   upload.single('file'),
   auth.authenticate('bearer', { session: false }), // <-- mengambil dan menerjemahkan data token, dan memasukkan userId dari token kedalam req.user.id
   async (req, res, next) => {
     try {
-      // pastikan data type ada di body:
-      if (!('type' in req.body)) {
-        return next(new CustomError(
-          400,
-          "ER_INVALID_FORMAT",
-          "Error invalid format",
-          "pet.type data is needed in body"
-        ))
-      }
-      req.body.type = req.body.type.toLowerCase()
+      let imageData = new FormData();
+      let uploadedPetImage
+      let result3 // <-- hasil prediksi gambar pet
 
       // pastikan data type ada di body:
       if (!('type' in req.body)) {
@@ -39,7 +39,49 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
 
       // kalau user memasukan gambar pet, maka analisa gambar pet teresebut:
       if (!_.isEmpty(req.file) && req.body.type === 'cat') {
-        // analyze cat image
+        imageData.append('file', fs.createReadStream(req.file.path));
+        uploadedPetImage = await axios(petUploadConfig(imageData))
+          .then(response => {
+            return response.data
+          })
+
+        if (!_.isEmpty(uploadedPetImage)) {
+          // Apabila berhasil di upload, masukkan hasil prediksi ke result 3:
+          result3 = await axios(petAnalyzingConfig(uploadedPetImage.id))
+            .then(response => {
+              return response.data[0]
+            })
+        }
+        result3.details = await axios(deleteAnalyzedDataConfig(uploadedPetImage.id))
+          .then(response => {
+            if (response.status === 204) {
+              return "The pet image was successfully analyzed"
+            } else {
+              return "The pet image was successfully analyzed but failed to delete temp data"
+            }
+          })
+        // analisa apakah foto yang diupload mengandung kucing atau anjing:
+        const labels = result3.labels
+        if (labels.some(i => i.Parents.some(p => p.Name == 'Cat' || p.Name == 'Dog'))) {
+          // tentukan kucing atau anjing:
+          if (isCatHelper(labels)) {
+            req.body.type = 'cat'
+            if (!('breed' in req.body))
+              req.body.breed = petBreedHelper(labels, 'Cat')
+          } else {
+            req.body.type = 'dog'
+            if (!('breed' in req.body))
+              req.body.breed = petBreedHelper(labels, 'Dog')
+          }
+        } else {
+          // Kalau bukan anjing atau kucing, kirim error:
+          next(new CustomError(
+            406,
+            "ER_NOT_CAT_OR_DOG",
+            "Error pet image not acceptable",
+            "Please upload a clear image consisting of cat or dog"
+          ))
+        }
       }
 
       // cari user di database:
@@ -64,12 +106,6 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
         ))
       }
 
-
-      // result 3 analisa foto pet:
-      const result3 = await imageAnalysisHelper(req.file.path)
-      if (!('breed' in req.body)) {
-        req.body.breed = result3.predictedBreed
-      }
 
       // result1 = memasukkan data pet baru ke database:
       const result1 = await new Controller('pets') // < -- class Controller untuk menjalankan sequelize pada table 'pets'
