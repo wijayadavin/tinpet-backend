@@ -63,6 +63,11 @@ const Sequelize = require('sequelize');
 const petAttributes = [
     'id',
     'name',
+    'gender',
+    'address',
+    'city',
+    'age',
+    'breed',
     'userId',
     'isMatched',
     'createdAt',
