@@ -4,4 +4,5 @@ module.exports = function searchArrayOfObjects(searchParameter, Array) {
             return Array[i];
         }
     }
+    return 0
 }

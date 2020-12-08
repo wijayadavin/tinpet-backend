@@ -1,5 +1,6 @@
 const searchArrayOfObjects = require("../searchArrayOfObjects")
 
+
 /**
  * 
  * @param {object} labels labels object
@@ -8,17 +9,22 @@ const searchArrayOfObjects = require("../searchArrayOfObjects")
  * @return {string} predicted breed name
  */
 function petBreedHelper(labels, type) {
+    const filteredByType = labels.filter((label) => {
+        return label.Parents.some(p => p.Name === type)
+    })
+    const filteredConfidenceLevel = filteredByType.map((filteredLabel) => {
+        return [filteredLabel.Confidence]
+    })
     const maxConfidence = Math.max.apply(
         Math,
-        labels.filter((label) => {
-            return label.Parents.some(p => p.Name === type)
-        })
-            .map((filteredLabel) => {
-                return [filteredLabel.Confidence]
-            })
+        filteredConfidenceLevel
     )
-    const predictedBreed = searchArrayOfObjects(maxConfidence, labels)
+    const predictedBreed = searchArrayOfObjects(maxConfidence, filteredByType)
+    if (!predictedBreed) {
+        return null
+    }
     return predictedBreed.Name
 }
+
 
 module.exports = petBreedHelper
