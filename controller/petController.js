@@ -63,17 +63,16 @@ const Sequelize = require('sequelize');
 const petAttributes = [
     'id',
     'name',
-    'type',
-    'breed',
     'gender',
     'address',
     'city',
     'age',
+    'breed',
     'userId',
     'isMatched',
-    [Sequelize.fn("COUNT", Sequelize.col("like.id")), "likeCount"],
-    [Sequelize.fn("COUNT", Sequelize.col("comment.id")), "commentCount"],
     'createdAt',
+    [Sequelize.fn("COUNT", Sequelize.col("like.id")), "likeCount"],
+    [Sequelize.fn("COUNT", Sequelize.col("comment.id")), "commentCount"]
 ]
 
 const petIncludes = [
