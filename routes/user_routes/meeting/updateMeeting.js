@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const { addListener } = require('process')
-const nodemailerConfig = require('../../../configs/nodemailerConfig')
+const nodemailerConfig = require('../../../config/nodemailerConfig')
 const Controller = require('../../../controller/dbController')
 const chatSenderHelper = require('../../../helper/chatSenderHelper')
 const CustomError = require('../../../helper/customErrorHelper')

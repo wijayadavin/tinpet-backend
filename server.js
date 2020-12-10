@@ -1,7 +1,7 @@
 require('dotenv').config({ path: __dirname + '/.env' })
 const express = require('express')
 const passport = require('passport')
-const db = require('./configs/dbConnection')
+const db = require('./config/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
 const defineRelations = require('./models/defineRelations')
