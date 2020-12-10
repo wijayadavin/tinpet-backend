@@ -11,24 +11,6 @@ const path = require('path')
 const routesPath = path.resolve('routes')
 const filePaths = readDir.readDirDeepSync(routesPath)
 
-
-// mysql relations:
-db
-  .authenticate()
-  .then(async () => {
-    defineRelations();
-    await db.sync({ force: false });
-    // await Users.findAll({
-    //   logging: console.log,
-    // })
-  })
-  .then(() => {
-    console.log("Connected to the database!");
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
 app.use(bodyParser.json())
 app.use(passport.initialize());
 app.use('/file', express.static('uploads'))
@@ -84,13 +66,32 @@ filePaths.forEach((filePath) => {
 })
 
 
-const port = process.env.PORT
-app.listen(port, () => {
-  console.log(`
-  
-  ╔═════════════════════════╗
-   TinPet API is running in:
-     http://localhost:${port}
-  ╚═════════════════════════╝
-           ＼ʕ•ᴥ•ʔ／`);
-})
+// Mysql & Server connection:
+db
+  .authenticate()
+  .then(async () => {
+    defineRelations();
+    await db.sync({ force: false });
+    // await Users.findAll({
+    //   logging: console.log,
+    // })
+  })
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`Successfully connected to the database!
+  _______       ____       __ 
+ /_  __(_)___  / __ \\___  / /_
+  / / / / __ \\/ /_/ / _ \\/ __/
+ / / / / / / / ____/  __/ /_  
+/_/ /_/_/ /_/_/    \\___/\\__/  
+                                                          
+╔═════════════════════════╗
+ TinPet API is running in:
+   ${process.env.BASE_URL}:${process.env.PORT}
+╚═════════════════════════╝
+         ＼ʕ•ᴥ•ʔ／`);
+    })
+  })
+  .catch((err) => {
+    console.error(err);
+  });
