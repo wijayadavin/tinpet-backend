@@ -36,7 +36,6 @@ describe(`========= USERS =========`, () => {
                 .post('/auth/register')
                 .send(userBody)
                 .end((err, res) => {
-                    console.log(res.res);
                     res.should.have.status(201)
                     res.body.should.be.a('object')
                     res.body.should.include.keys(
@@ -50,7 +49,7 @@ describe(`========= USERS =========`, () => {
     })
     after(() => {
         createdID.forEach((id) => {
-            Users.findByIdAndRemove(id, (err) => {
+            Users.destroy({ where: { id: id } }, (err) => {
                 if (err) {
                     console.log(err)
                 }
@@ -58,4 +57,3 @@ describe(`========= USERS =========`, () => {
         })
     })
 })
-

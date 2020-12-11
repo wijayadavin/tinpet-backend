@@ -15,7 +15,7 @@ app.post('/auth/register', async (req, res, next) => {
       .register()
 
     // result2 = memasukan data petImage ke database:
-    const result2 = await new Controller('user_images')
+    const result2 = await new Controller('userImages')
       .add({
         userId: result1.id,
         url: `${process.env.BASE_URL}/file/default-user.jpg`

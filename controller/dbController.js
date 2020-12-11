@@ -19,7 +19,7 @@ class Controller {
      */
     constructor(pluralTableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
-        this.model = db[pluralTableName]
+        this.model = db[humps.camelize(pluralTableName)]
     }
 
 
@@ -118,11 +118,10 @@ class Controller {
      */
     async add(body) {
         body.id = uuidv4()
-        const result = await new this.model(
-            body
-        ).save().catch((err) => {
-            throw err
-        })
+        const result = await new this.model(body)
+            .save().catch((err) => {
+                throw err
+            })
 
         return result['dataValues']
     }
