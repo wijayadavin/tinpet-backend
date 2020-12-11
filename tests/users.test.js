@@ -1,9 +1,10 @@
 const { expect } = require("chai")
 const { random, name } = require('faker')
-const { v4 } = require("uuid")
 const DatabaseHelper = require("../helper/test/databaseHelper")
 const database = new DatabaseHelper
 
+
+// 
 let db
 before(async () => {
     db = await database.start()
@@ -14,9 +15,7 @@ after(async () => {
 })
 
 const user = {
-    id: v4(),
-    firstName: name.firstName(),
-    lastName: name.lastName(),
+    name: name.firstName() + name.lastName(),
     age: random.number(99),
     password: random.alphaNumeric(9)
 }

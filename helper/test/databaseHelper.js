@@ -17,6 +17,7 @@ class DatabaseHelper {
         this.dbName = random.alphaNumeric(10)
     }
     async start() {
+        // sync and seed process:
         process.env.MYSQL_DATABASE = this.dbName
         const db = require('../../models')
         await execute('sequelize db:create')
