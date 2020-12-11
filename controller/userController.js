@@ -4,7 +4,7 @@ const { salt, checkPassword } = require("../helper/bcryptHelper");
 const validateBody = require('../helper/jsonValidatorHelper')
 const jwt = require('jsonwebtoken')
 const jwtConfig = require('../configs/jwtConfig')
-
+const duplicateChecker = require('../helper/duplicateChecker')
 
 const usersSchema = {
     "description": "user registration validation",
@@ -78,15 +78,13 @@ class UserController extends Controller {
             usersSchema.required = Object.keys(this.body)
             this.validate()
 
-            if (this.body.email) {
-                if (await this.get({ email: this.body.email }))
-                    throw new CustomError(409, "ER_DUP_ENTRY", "Duplicate entry", "The same email already exists")
-            }
+            let foundUser = await this.get({ id: id })
+            foundUser = foundUser['dataValues']
+            let noRepetitionBody = await duplicateChecker(this.body, foundUser).noRepetition
+            if (noRepetitionBody.password)
+                noRepetitionBody.password = await salt(noRepetitionBody.password)
 
-            if (this.body.password)
-                this.body.password = await salt(this.body.password)
-
-            const result = await this.edit(id, this.body)
+            const result = await this.edit(id, noRepetitionBody)
 
             return result
         } catch (err) { throw err }
