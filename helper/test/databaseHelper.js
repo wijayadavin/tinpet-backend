@@ -1,16 +1,7 @@
+require('dotenv').config()
 const { random } = require('faker')
+const execute = require('./executeUtil')
 
-const exec = require('child_process').exec
-function execute(command) {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error)
-                reject({ error, stderr })
-            else
-                resolve({ stdout })
-        })
-    })
-}
 
 class DatabaseHelper {
     constructor() {
