@@ -80,7 +80,7 @@ class UserController extends Controller {
 
             let foundUser = await this.get({ id: id })
             foundUser = foundUser['dataValues']
-            let noRepetitionBody = await duplicateChecker(this.body, foundUser).noRepetition
+            let noRepetitionBody = await duplicateChecker(this.body, foundUser)
             if (noRepetitionBody.password)
                 noRepetitionBody.password = await salt(noRepetitionBody.password)
 
