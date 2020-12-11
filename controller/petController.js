@@ -1,6 +1,6 @@
 const Controller = require("./dbController");
-const getModel = require('../models');
 const Sequelize = require('sequelize');
+const getModel = require('../helper/modelHelpers');
 
 // const petsSchema = {
 //     "description": "pet registration validation",

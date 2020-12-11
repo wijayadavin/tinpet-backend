@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const { v4: uuidv4 } = require('uuid')
-const getModel = require('../models')
+const db = require('../models')
 const humps = require('humps')
 class Controller {
     /**
@@ -19,7 +19,7 @@ class Controller {
      */
     constructor(pluralTableName) {
         // Mencari nama model yang ingin di pakai dan masukan ke this.model:
-        this.model = getModel(pluralTableName)
+        this.model = db[humps.camelize(pluralTableName)]
     }
 
 
@@ -70,7 +70,7 @@ class Controller {
             joinedTableNames = [joinedTableNames]
         }
         // jadikan class model sequelize:
-        joinedTableNames = joinedTableNames.map(getModel)
+        joinedTableNames = joinedTableNames.map(db)
 
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findOne({
@@ -92,7 +92,7 @@ class Controller {
             joinedTableNames = [joinedTableNames]
         }
         // jadikan class model sequelize:
-        joinedTableNames = joinedTableNames.map(getModel)
+        joinedTableNames = joinedTableNames.map(db)
 
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findAll({
@@ -118,11 +118,10 @@ class Controller {
      */
     async add(body) {
         body.id = uuidv4()
-        const result = await new this.model(
-            body
-        ).save().catch((err) => {
-            throw err
-        })
+        const result = await new this.model(body)
+            .save().catch((err) => {
+                throw err
+            })
 
         return result['dataValues']
     }

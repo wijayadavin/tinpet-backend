@@ -1,4 +1,4 @@
-const db = require('../configs/dbConnection')
+const db = require('../config/dbConnection')
 const basicModel = require('./basicModel')
 
 

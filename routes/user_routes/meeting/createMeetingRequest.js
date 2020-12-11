@@ -3,7 +3,7 @@ const router = express.Router()
 const auth = require('../../../middleware/auth')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const Controller = require('../../../controller/dbController')
-const nodemailerConfig = require('../../../configs/nodemailerConfig')
+const nodemailerConfig = require('../../../config/nodemailerConfig')
 const CustomError = require('../../../helper/customErrorHelper')
 const chatSenderHelper = require('../../../helper/chatSenderHelper')
 
