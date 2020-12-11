@@ -22,7 +22,7 @@ app.post('/auth/register', async (req, res, next) => {
       })
 
     result1.imageUrl = result2.url
-    res.send(result1)
+    res.status(201).send(result1)
   } catch (err) { next(err) }
 })
 
