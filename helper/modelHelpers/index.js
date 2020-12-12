@@ -3,6 +3,6 @@ const humps = require('humps')
 
 
 module.exports = function getModel(pluralTableName) {
-    pluralTableName = humps.camelize(pluralTableName)
-    return db[pluralTableName]
+    const parsedPluralTableName = humps.camelize(pluralTableName)
+    return db[parsedPluralTableName]
 }

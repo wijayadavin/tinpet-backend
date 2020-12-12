@@ -35,7 +35,22 @@ describe(`========= USERS =========`, () => {
         })
     })
     describe('POST /auth/register', () => {
-        it('Should able to register a new user', (done) => {
+        it('it should NOT register a new user, since the format is invalid', (done) => {
+            chai
+                .request(server)
+                .post('/auth/register')
+                .send({
+                    name: 'WrongNameFormat`',
+                    email: 'wrongEmailFormat',
+                    password: '123455678',
+                    mobileNumber: '8123456789',
+                })
+                .end((err, res) => {
+                    res.should.have.status(400)
+                    done()
+                })
+        })
+        it('it should able to register a new user', (done) => {
             chai
                 .request(server)
                 .post('/auth/register')
@@ -53,6 +68,19 @@ describe(`========= USERS =========`, () => {
         })
     })
     describe('POST /auth/login', () => {
+        it('it should return ERROR 401 when logged in with wrong credentials', (done) => {
+            chai
+                .request(server)
+                .post('/auth/login')
+                .send({
+                    email: userBody.email,
+                    password: 'wrongPassword123'
+                })
+                .end((err, res) => {
+                    res.should.have.status(401)
+                    done()
+                })
+        })
         it('it should GET a token when logged in as a registered user', (done) => {
             chai
                 .request(server)
@@ -187,7 +215,7 @@ describe(`========= USERS =========`, () => {
                     console.log(err)
                 }
             })
-            console.log(`Test data ${id} was successfully deleted!`)
+            console.log(`User test data ${id} was successfully deleted!`)
         })
         console.log('Test completed!')
     })

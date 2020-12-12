@@ -1,6 +1,6 @@
 const Controller = require("./dbController");
 const Sequelize = require('sequelize');
-const getModel = require('../helper/modelHelpers');
+const db = require('../models');
 
 // const petsSchema = {
 //     "description": "pet registration validation",
@@ -78,25 +78,25 @@ const petAttributes = [
 
 const petIncludes = [
     {
-        model: getModel('pet_images')
+        model: db['petImages']
     },
     {
         as: "like",
-        model: getModel('pet_likes'),
+        model: db['petLikes'],
         attribute: [],
     },
     {
         as: "comment",
-        model: getModel('pet_comments'),
+        model: db['petComments'],
         attribute: [],
     },
     {
         as: "user",
-        model: getModel('users'),
+        model: db['users'],
         attribute: [],
         include: {
             as: "userImage",
-            model: getModel('user_images'),
+            model: db['userImages'],
             attribute: [],
         }
     }
