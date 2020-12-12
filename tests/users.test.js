@@ -5,7 +5,7 @@ const chaiHttp = require('chai-http')
 const chai = require('chai')
 const server = require('../server')
 const Users = require("../models/Users")
-const { checkPassword } = require("../helper/bcryptHelper");
+const { userBodyParser } = require("../helper/modelHelpers/user")
 const should = chai.should()
 const createdID = []
 chai.use(chaiHttp)
@@ -153,10 +153,9 @@ describe(`========= USERS =========`, () => {
         })
         it(`it should EDIT the user's profile by token`, (done) => {
             const id = createdID.slice(-1).pop()
-            const newUserBody = {
+            let newUserBody = {
                 name: 'editedName',
                 email: 'editedEmail@email.com',
-                password: 'editedPassword123',
                 mobileNumber: '08987654321',
                 address: 'editedStreetAddress',
                 city: 'Bandung',
@@ -167,13 +166,12 @@ describe(`========= USERS =========`, () => {
                 .set('Authorization', `Bearer ${userToken}`)
                 .send(newUserBody)
                 .end((err, res) => {
-                    res.body.password = checkPassword(res.body.password, newUserBody.password)
+                    newUserBody = userBodyParser(newUserBody)
                     res.should.have.status(200)
                     res.body.should.be.an('object')
                     res.body.should.have.property('id').eql(id)
                     res.body.should.have.property('name').eql(newUserBody.name)
                     res.body.should.have.property('email').eql(newUserBody.email)
-                    res.body.should.have.property('password').eql(true)
                     res.body.should.have.property('mobileNumber').eql(newUserBody.mobileNumber)
                     res.body.should.have.property('address').eql(newUserBody.address)
                     res.body.should.have.property('city').eql(newUserBody.city)
@@ -182,13 +180,15 @@ describe(`========= USERS =========`, () => {
         })
     })
     after(() => {
-        console.log('Deleting user test data ...')
+        console.log('Cleaning test data ...')
         createdID.forEach((id) => {
-            Users.destroy({ where: { id: id } }, (err) => {
+            Users.destroy({ where: { id: id } }, (err, res) => {
                 if (err) {
                     console.log(err)
                 }
             })
+            console.log(`Test data ${id} was successfully deleted!`)
         })
+        console.log('Test completed!')
     })
 })

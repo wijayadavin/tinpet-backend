@@ -3,7 +3,7 @@ const app = express.Router()
 const routeErrorHandler = require('../../middleware/errorHandler')
 const Controller = require('../../controller/dbController')
 const UserController = require('../../controller/userController')
-const { userBodyParser, userResultParser } = require('../../helper/modelHelpers/user')
+const { userBodyParser } = require('../../helper/modelHelpers/user')
 
 
 app.post('/auth/register', async (req, res, next) => {
