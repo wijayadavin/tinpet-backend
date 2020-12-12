@@ -60,7 +60,7 @@ app.use(cors(corsOptionsDelegate))
 // run all routes in routes folder:
 filePaths.forEach((filePath) => {
   const relativeFilePath = `./${filePath}`
-  console.log(`${relativeFilePath} loaded!`);
+  // console.log(`${relativeFilePath} loaded!`);
   const route = require(relativeFilePath)
   app.use(route)
 })
@@ -86,10 +86,11 @@ db
 /_/ /_/_/ /_/_/    \\___/\\__/  
                                                           
 ╔═════════════════════════╗
- TinPet API is running in:
+ TinPet API is running on:
    ${process.env.BASE_URL}:${process.env.PORT}
 ╚═════════════════════════╝
-         ＼ʕ•ᴥ•ʔ／`);
+         ＼ʕ•ᴥ•ʔ／
+         `);
     })
   })
   .catch((err) => {

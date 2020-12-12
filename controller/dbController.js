@@ -2,6 +2,8 @@ const _ = require('lodash')
 const { v4: uuidv4 } = require('uuid')
 const db = require('../models')
 const humps = require('humps')
+const getModel = require('../helper/modelHelpers')
+
 class Controller {
     /**
      * Controller untuk mengolah database mysql.
@@ -70,7 +72,7 @@ class Controller {
             joinedTableNames = [joinedTableNames]
         }
         // jadikan class model sequelize:
-        joinedTableNames = joinedTableNames.map(db)
+        joinedTableNames = joinedTableNames.map(getModel)
 
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findOne({
@@ -92,7 +94,7 @@ class Controller {
             joinedTableNames = [joinedTableNames]
         }
         // jadikan class model sequelize:
-        joinedTableNames = joinedTableNames.map(db)
+        joinedTableNames = joinedTableNames.map(getModel)
 
         // lakukan pencarian dengan sequelize:
         let result = await this.model.findAll({
@@ -102,7 +104,6 @@ class Controller {
         }).catch((err) => {
             throw err
         })
-
         return result
     }
 
