@@ -139,6 +139,14 @@ describe(`========= Meetings =========`, () => {
                 })
         })
     })
+    // describe('GET /meeting', () => {
+    //     it('it should returned 404 ERROR since the meeting data was not found', (done) => {
+    //     })
+    //     it('it should returned 401 ERROR since the token was not sent', (done) => {
+    //     })
+    //     it(`it should GET user's meeting data`, (done) => {
+    //     })
+    // })
     after(() => {
         console.log('Cleaning test data ...')
         Object.keys(createdId).forEach((tableName) => {
