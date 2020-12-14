@@ -128,7 +128,7 @@ app.post('/pet', // <-- menangkap metode post di alamat rute/path: {{baseUrl}}/p
 
 
       // mengirim respon hasil data yang berhasil masuk:
-      res.send({ pet: petResultParser(result1), petImage: result2, petImageAnalysis: result3 }) // response adalah data yang dikembalikan ke postman
+      res.status(201).send({ pet: petResultParser(result1), petImage: result2, petImageAnalysis: result3 }) // response adalah data yang dikembalikan ke postman
     }
     // menangkap error dan mengirim ke routeErrorHandler:
     catch (err) {
