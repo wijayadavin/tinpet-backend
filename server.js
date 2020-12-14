@@ -17,7 +17,7 @@ app.use('/file', express.static('uploads'))
 
 // Solve CORS for any websites:
 // app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*", "http://localhost:3000")
+//   res.header("Access-Control-Allow-Origin", "*")
 //   res.header(
 //     "Access-Control-Allow-Headers",
 //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -44,17 +44,17 @@ fs.readdir(path.resolve(), (err, files) => {
 
 // Using the CORS package:
 const cors = require('cors')
-
-const corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (["http://localhost:3000"].indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }
-  } else {
-    corsOptions = { origin: false }
-  }
-  callback(null, corsOptions)
-}
-app.use(cors(corsOptionsDelegate))
+app.use(cors())
+// const corsOptionsDelegate = function (req, callback) {
+//   let corsOptions;
+//   if (["http://localhost:3000"].indexOf(req.header("Origin")) !== -1) {
+//     corsOptions = { origin: true }
+//   } else {
+//     corsOptions = { origin: false }
+//   }
+//   callback(null, corsOptions)
+// }
+// app.use(cors(corsOptionsDelegate))
 
 
 // run all routes in routes folder:

@@ -1,45 +1,17 @@
 /**
  * A duplicate checker
- * @param {object} inputArray 
- * @param {object} checkerArray 
+ * @param {object} inputObject input object to be processed
+ * @param {object} checkerObject object to check the input
  * 
- * @return {object} return {uniqueList, duplicates, noRepetition}
+ * @return {object} return unique values from inputObject
  */
-function duplicateChecker(inputArray, checkerArray) {
-    if (typeof inputArray !== 'array') {
-        inputArray = [inputArray]
-    }
-    if (typeof checkerArray !== 'array') {
-        checkerArray = [checkerArray]
-    }
-    const ObjectOfObjects = inputArray.reduce(
-        (acc, o) => {
-            acc[o.value] = o;
-            return acc;
-        }, {})
-
-    const selectinputArrayObject = checkerArray.reduce(
-        (acc, o) => {
-            if (ObjectOfObjects[o.value]) {
-                acc.duplicates.push(o)
-                return acc;
-            }
-            else {
-                acc.objectWithoutDuplicates.push(o)
-            }
-            acc.uniqueList[o.value] = o;
-            return acc;
-        }, { uniqueList: {}, objectWithoutDuplicates: [], duplicates: [] })
-
-
-    return {
-        uniqueList: Object.values(selectinputArrayObject.uniqueList = {
-            ...selectinputArrayObject.uniqueList,
-            ...ObjectOfObjects
-        }),
-        duplicates: selectinputArrayObject.duplicates,
-        noRepetition: selectinputArrayObject.objectWithoutDuplicates
-    }
+function removeDuplicate(inputObj, checkerObj) {
+    Object.keys(inputObj).map(function (key) {
+        if (inputObj[key] == checkerObj[key]) {
+            delete inputObj[key]
+        }
+    })
+    return inputObj
 }
 
-module.exports = duplicateChecker
+module.exports = removeDuplicate

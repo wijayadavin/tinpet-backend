@@ -3,7 +3,7 @@ const CustomError = require("../helper/customErrorHelper");
 const { salt, checkPassword } = require("../helper/bcryptHelper");
 const validateBody = require('../helper/jsonValidatorHelper')
 const jwt = require('jsonwebtoken')
-const jwtConfig = require('../configs/jwtConfig')
+const jwtConfig = require('../config/jwtConfig')
 const duplicateChecker = require('../helper/duplicateChecker')
 
 const usersSchema = {
@@ -80,7 +80,7 @@ class UserController extends Controller {
 
             let foundUser = await this.get({ id: id })
             foundUser = foundUser['dataValues']
-            let noRepetitionBody = await duplicateChecker(this.body, foundUser).noRepetition
+            let noRepetitionBody = await duplicateChecker(this.body, foundUser)
             if (noRepetitionBody.password)
                 noRepetitionBody.password = await salt(noRepetitionBody.password)
 
