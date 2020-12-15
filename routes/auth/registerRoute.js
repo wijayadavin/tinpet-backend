@@ -3,7 +3,7 @@ const app = express.Router()
 const routeErrorHandler = require('../../middleware/errorHandler')
 const Controller = require('../../controller/dbController')
 const UserController = require('../../controller/userController')
-const { userBodyParser, userResultParser } = require('../../helper/modelHelpers/user')
+const { userBodyParser } = require('../../helper/modelHelpers/user')
 
 
 app.post('/auth/register', async (req, res, next) => {
@@ -15,14 +15,14 @@ app.post('/auth/register', async (req, res, next) => {
       .register()
 
     // result2 = memasukan data petImage ke database:
-    const result2 = await new Controller('user_images')
+    const result2 = await new Controller('userImages')
       .add({
         userId: result1.id,
         url: `${process.env.BASE_URL}/file/default-user.jpg`
       })
 
     result1.imageUrl = result2.url
-    res.send(result1)
+    res.status(201).send(result1)
   } catch (err) { next(err) }
 })
 

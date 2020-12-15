@@ -3,7 +3,7 @@ const CustomError = require("../helper/customErrorHelper");
 const { salt, checkPassword } = require("../helper/bcryptHelper");
 const validateBody = require('../helper/jsonValidatorHelper')
 const jwt = require('jsonwebtoken')
-const jwtConfig = require('../configs/jwtConfig')
+const jwtConfig = require('../config/jwtConfig')
 const duplicateChecker = require('../helper/duplicateChecker')
 
 const usersSchema = {

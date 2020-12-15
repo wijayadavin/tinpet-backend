@@ -3,7 +3,7 @@ const router = express.Router()
 const auth = require('../../../middleware/auth')
 const routeErrorHandler = require('../../../middleware/errorHandler')
 const Controller = require('../../../controller/dbController')
-const nodemailerConfig = require('../../../configs/nodemailerConfig')
+const nodemailerConfig = require('../../../config/nodemailerConfig')
 const CustomError = require('../../../helper/customErrorHelper')
 const chatSenderHelper = require('../../../helper/chatSenderHelper')
 
@@ -42,8 +42,11 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
 
             // cari data recipient pet (penerima):
             const foundRecipientPet = await new Controller('pets').get({ id: req.body.recipientPetId })
-
+            if (!foundRecipientPet) {
+                next(new CustomError(404, "ER_NOT_FOUND", "Not found", "Pet id was not found"))
+            }
             // masukan recipient user id ke dalam body:
+
             req.body.recipientUserId = foundRecipientPet.userId
 
             // create data baru di table meetings:

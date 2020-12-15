@@ -9,10 +9,10 @@ const _ = require('lodash')
 
 const axios = require('axios');
 const fs = require('fs');
-const petUploadConfig = require('../../../configs/axios/petUploadConfig')
+const petUploadConfig = require('../../../config/axios/petUploadConfig')
 const FormData = require('form-data');
-const petAnalyzingConfig = require('../../../configs/axios/petAnalyzingConfig')
-const deleteAnalyzedDataConfig = require('../../../configs/axios/deleteAnalyzedDataConfig')
+const petAnalyzingConfig = require('../../../config/axios/petAnalyzingConfig')
+const deleteAnalyzedDataConfig = require('../../../config/axios/deleteAnalyzedDataConfig')
 const CustomError = require('../../../helper/customErrorHelper')
 const petBreedHelper = require('../../../helper/pet/petBreedHelper')
 const isCatHelper = require('../../../helper/pet/isCatHelper')

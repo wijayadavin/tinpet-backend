@@ -1,7 +1,7 @@
 require('dotenv').config({ path: __dirname + '/.env' })
 const express = require('express')
 const passport = require('passport')
-const db = require('./configs/dbConnection')
+const db = require('./config/dbConnection')
 const bodyParser = require('body-parser')
 const app = express()
 const defineRelations = require('./models/defineRelations')
@@ -17,7 +17,7 @@ app.use('/file', express.static('uploads'))
 
 // Solve CORS for any websites:
 // app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*", "http://localhost:3000")
+//   res.header("Access-Control-Allow-Origin", "*")
 //   res.header(
 //     "Access-Control-Allow-Headers",
 //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -44,23 +44,23 @@ fs.readdir(path.resolve(), (err, files) => {
 
 // Using the CORS package:
 const cors = require('cors')
-
-const corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (["http://localhost:3000"].indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }
-  } else {
-    corsOptions = { origin: false }
-  }
-  callback(null, corsOptions)
-}
-app.use(cors(corsOptionsDelegate))
+app.use(cors())
+// const corsOptionsDelegate = function (req, callback) {
+//   let corsOptions;
+//   if (["http://localhost:3000"].indexOf(req.header("Origin")) !== -1) {
+//     corsOptions = { origin: true }
+//   } else {
+//     corsOptions = { origin: false }
+//   }
+//   callback(null, corsOptions)
+// }
+// app.use(cors(corsOptionsDelegate))
 
 
 // run all routes in routes folder:
 filePaths.forEach((filePath) => {
   const relativeFilePath = `./${filePath}`
-  console.log(`${relativeFilePath} loaded!`);
+  // console.log(`${relativeFilePath} loaded!`);
   const route = require(relativeFilePath)
   app.use(route)
 })
@@ -86,12 +86,15 @@ db
 /_/ /_/_/ /_/_/    \\___/\\__/  
                                                           
 ╔═════════════════════════╗
- TinPet API is running in:
+ TinPet API is running on:
    ${process.env.BASE_URL}:${process.env.PORT}
 ╚═════════════════════════╝
-         ＼ʕ•ᴥ•ʔ／`);
+         ＼ʕ•ᴥ•ʔ／
+         `);
     })
   })
   .catch((err) => {
     console.error(err);
   });
+
+module.exports = app
