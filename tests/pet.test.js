@@ -5,6 +5,7 @@ const chaiHttp = require('chai-http')
 const chai = require('chai')
 const server = require('../server')
 const db = require("../models")
+const { url } = require("inspector")
 const should = chai.should()
 let createdId = { users: [], pets: [] }  // [] -> membuat variabel array 
 let userToken
@@ -27,6 +28,12 @@ const petBody = {
     type: 'dog',
     address: address.streetAddress(),
     city: 'Jakarta',
+    breed: 'chihuahua'
+}
+
+const petImages = {
+    file: 'url',
+    type: 'cat',
     breed: 'chihuahua'
 }
 
@@ -72,6 +79,7 @@ describe(`========= USERS =========`, () => {
                     done()
                 })
         })
+
     })
     describe('POST /pet', () => {
         it('it should created a new pet data', (done) => {
@@ -96,9 +104,20 @@ describe(`========= USERS =========`, () => {
                     res.body.pet.should.have.property('address').eql(petBody.address)
                     res.body.pet.should.have.property('city').eql(petBody.city)
                     res.body.pet.should.have.property('breed').eql(petBody.breed)
-                    res.body.pet.should.include.keys()
+                    res.body.pet.should.include.keys(
+                        'id', 'name', 'age', 'gender', 'type', 'address', 'city', 'breed'
+                    )
+
+
 
                     // test data res.body.petImage:
+                    res.body.pet.should.have.property('id').eql(id)
+                    res.body.pet.should.have.property('gender').eql(petBody.gender)
+                    res.body.pet.should.have.property('type').eql(petBody.type)
+                    res.body.pet.should.include.keys(
+                        'id', 'type', 'breed'
+                    )
+
                     done()
                 })
         })
