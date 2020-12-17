@@ -68,30 +68,30 @@ describe(`========= Meetings =========`, () => {
         })
     })
     describe('POST /meeting', () => {
-        // it('it should created a new meeting data', (done) => {
-        //     chai
-        //         .request(server)
-        //         .post(`/meeting`)
-        //         .set('Authorization', `Bearer ${senderUserToken}`)
-        //         .send({
-        //             recipientPetId: recipientPet.id,
-        //             date: "10-10-2021",
-        //             hour: "10:10",
-        //             location: "City town hall",
-        //             text: "Hi!, let's meet"
-        //         })
-        //         .end((err, res) => {
-        //             res.should.have.status(200)
-        //             res.body.should.be.an('object')
-        //             res.body.should.include.keys(
-        //                 'meeting', 'senderNotif', 'recipientNotif',
-        //                 'chatLine', 'recipientEmailNotif')
-        //             createdId.meetings.push(res.body.meeting.id)
-        //             createdId.userNotifications.push(res.body.senderNotif.id, res.body.recipientNotif.id)
-        //             createdId.userChatLines.push(res.body.chatLine.id)
-        //             done()
-        //         })
-        // })
+        it('it should created a new meeting data', (done) => {
+            chai
+                .request(server)
+                .post(`/meeting`)
+                .set('Authorization', `Bearer ${senderUserToken}`)
+                .send({
+                    recipientPetId: recipientPet.id,
+                    date: "10-10-2021",
+                    hour: "10:10",
+                    location: "City town hall",
+                    text: "Hi!, let's meet"
+                })
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.should.be.an('object')
+                    res.body.should.include.keys(
+                        'meeting', 'senderNotif', 'recipientNotif',
+                        'chatLine', 'recipientEmailNotif')
+                    createdId.meetings.push(res.body.meeting.id)
+                    createdId.userNotifications.push(res.body.senderNotif.id, res.body.recipientNotif.id)
+                    createdId.userChatLines.push(res.body.chatLine.id)
+                    done()
+                })
+        })
         it('it should returned 401 ERROR, since no token was sent', (done) => {
             chai
                 .request(server)

@@ -78,21 +78,33 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
             const foundRecipientUser = await new Controller('users').get({ id: foundRecipientPet.userId })
-
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
                 to: foundRecipientUser.email,
                 subject: '🐱 You received a new meeting request in TinPet!',
                 html: `
-                <h1>
-                    Howdy ${foundRecipientUser.name}! Your pet named ${foundRecipientPet.name} had received a meeting request!
-                </h1>
+<head>
+    <style>
+        .style {
+            text-align: center;
+        }
+    </style>
+</head>
+<body text-align: center>
+    <div class=style>
+    <a href="https://www.tinpet.my.id">
+        <img src=http://api.tinpet.my.id/file/new-meeting-notif.jpg></img>
+        </a>
+        <h2>Howdy ${foundRecipientUser.name}!</h2>
+        Your pet named ${foundRecipientPet.name} had received a meeting request!
+    </div>
+</body>
                 `
             }
-
             // result 4, mengirimkan notifikasi email:
             const result5 = await nodemailerConfig.sendMail(mailOptions)
                 .catch(err => { next(err) })
+
 
             // Jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
             res.send({
