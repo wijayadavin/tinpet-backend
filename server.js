@@ -10,10 +10,12 @@ const readDir = require('read-dir-deep');
 const path = require('path')
 const routesPath = path.resolve('routes')
 const filePaths = readDir.readDirDeepSync(routesPath)
+const cors = require('cors')
 
 app.use(bodyParser.json())
 app.use(passport.initialize());
 app.use('/file', express.static('uploads'))
+
 
 // Solve CORS for any websites:
 // app.use((req, res, next) => {
@@ -30,6 +32,7 @@ app.use('/file', express.static('uploads'))
 //   next()
 // })
 
+
 // Solve folder for uploads:
 fs.readdir(path.resolve(), (err, files) => {
   if (err) {
@@ -42,22 +45,20 @@ fs.readdir(path.resolve(), (err, files) => {
 })
 
 
-// Using the CORS package:
-const cors = require('cors')
-// app.use(cors())
-const corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if ([
-    "http://localhost:3000",
-    "https://tinder-pet.herokuapp.com"
-  ].indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }
-  } else {
-    corsOptions = { origin: false }
-  }
-  callback(null, corsOptions)
-}
-app.use(cors(corsOptionsDelegate))
+app.use(cors())
+// const corsOptionsDelegate = function (req, callback) {
+//   let corsOptions;
+//   if ([
+//     "http://localhost:3000",
+//     "https://tinder-pet.herokuapp.com"
+//   ].indexOf(req.header("Origin")) !== -1) {
+//     corsOptions = { origin: true }
+//   } else {
+//     corsOptions = { origin: false }
+//   }
+//   callback(null, corsOptions)
+// }
+// app.use(cors(corsOptionsDelegate))
 
 
 // run all routes in routes folder:
