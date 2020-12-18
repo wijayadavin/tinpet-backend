@@ -13,11 +13,6 @@ chai.use(chaiHttp)
 
 let userToken
 
-// const dummyUserBody = {
-//     email: 'davinblackz@gmail.com',
-//     password: 'davin12345'
-// }
-
 const userBody = {
     name: name.firstName() + name.lastName(),
     email: internet.email(),
@@ -27,7 +22,6 @@ const userBody = {
     city: 'Jakarta',
 }
 
-// setTimeout(() => { console.log("Start testing..."); }, 2000);
 describe(`========= USERS =========`, () => {
     describe('Start server', () => {
         it('it should start the server', (done) => {

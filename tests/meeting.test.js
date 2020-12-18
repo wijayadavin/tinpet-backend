@@ -33,6 +33,11 @@ const recipientUserCredentials = {
 
 
 describe(`========= Meetings =========`, () => {
+    describe('Start server', () => {
+        it('it should start the server', (done) => {
+            setTimeout(() => done(), 220)
+        })
+    })
     describe('Data preparation', () => {
         it(`it should GET senderUser's token `, (done) => {
             chai
