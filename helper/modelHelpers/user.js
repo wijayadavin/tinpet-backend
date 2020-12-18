@@ -19,6 +19,7 @@ function userBodyParser(body) {
             return body
         }
     }
+    return body
 }
 
 // pet result parser:

@@ -6,7 +6,7 @@ const routeErrorHandler = require('../../../../middleware/errorHandler')
 const upload = require('../../../../middleware/uploadMiddleware')
 const Controller = require('../../../../controller/dbController')
 const { userBodyParser } = require('../../../../helper/modelHelpers/user')
-
+const _ = require('lodash')
 
 router.patch('/profile',
     upload.single('file'),
@@ -14,7 +14,8 @@ router.patch('/profile',
     async (req, res, next) => {
         try {
             req.body = userBodyParser(req.body)
-            if (req.file) {
+            if (!_.isEmpty(req.file)) {
+                // kalau user memasukan data file
                 const result1 = await new UserController(req.body).update(req.user.id)
 
                 // result2 = edit data userImage di database:
@@ -24,6 +25,7 @@ router.patch('/profile',
 
                 res.send({ user: result1, userImage: result2 })
             } else {
+                // kalau user tidak memasukan data file
                 let result1 = await new UserController(req.body).update(req.user.id)
                 const userImage = await new Controller('userImages').get({ userId: req.user.id })
                 result1.imageUrl = userImage['dataValues'].url
