@@ -25,7 +25,7 @@ const upload = multer({
         const name = file.originalname
         const splittedName = name.split('.')
 
-        if (splittedName[1] !== 'jpg' && splittedName[1] !== 'png') {
+        if (splittedName[1] !== 'jpg' && splittedName[1] !== 'png' && splittedName[1] !== 'jpeg') {
             return cb(new Error('image only'))
         } else {
             cb(null, true)
