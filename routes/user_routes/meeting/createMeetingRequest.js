@@ -103,7 +103,10 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             }
             // result 4, mengirimkan notifikasi email:
             const result5 = await nodemailerConfig.sendMail(mailOptions)
-                .catch(err => { console.log(err) })
+                .catch(err => {
+                    console.log(`failed to send email from ${process.env.EMAIL} to ${foundRecipientUser.email}`)
+                    console.log(err)
+                })
 
 
             // Jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
