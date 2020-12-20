@@ -80,7 +80,7 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             const foundRecipientUser = await new Controller('users').get({ id: foundRecipientPet.userId })
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
-                to: "foundRecipientUser.email",
+                to: foundRecipientUser.email,
                 subject: '🐱 You received a new meeting request in TinPet!',
                 html: `
 <head>
