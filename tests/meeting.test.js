@@ -73,7 +73,7 @@ describe(`========= Meetings =========`, () => {
         })
     })
     describe('POST /meeting', () => {
-        it('it should created a new meeting data', (done) => {
+        it('it should created a new meeting data and send email', (done) => {
             chai
                 .request(server)
                 .post(`/meeting`)
@@ -91,6 +91,7 @@ describe(`========= Meetings =========`, () => {
                     res.body.should.include.keys(
                         'meeting', 'senderNotif', 'recipientNotif',
                         'chatLine', 'recipientEmailNotif')
+                    res.body.recipientEmailNotif.should.be.an('object')
                     createdId.meetings.push(res.body.meeting.id)
                     createdId.userNotifications.push(res.body.senderNotif.id, res.body.recipientNotif.id)
                     createdId.userChatLines.push(res.body.chatLine.id)
