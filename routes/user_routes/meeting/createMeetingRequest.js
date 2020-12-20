@@ -80,7 +80,7 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             const foundRecipientUser = await new Controller('users').get({ id: foundRecipientPet.userId })
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
-                to: foundRecipientUser.email,
+                to: "foundRecipientUser.email",
                 subject: '🐱 You received a new meeting request in TinPet!',
                 html: `
 <head>
@@ -103,7 +103,7 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             }
             // result 4, mengirimkan notifikasi email:
             const result5 = await nodemailerConfig.sendMail(mailOptions)
-                .catch(err => { next(err) })
+                .catch(err => { console.log(err) })
 
 
             // Jalankan res.send(result 1, 2, 3, dan 4 digabung jadi 1):
@@ -112,10 +112,10 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
                 senderNotif: result2,
                 recipientNotif: result3,
                 chatLine: result4,
-                recipientEmailNotif: {
+                recipientEmailNotif: result5 ? {
                     messageSent: result5.messageId,
                     ...mailOptions
-                }
+                } : null
             })
         } catch (err) {
             next(err)
