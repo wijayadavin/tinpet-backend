@@ -72,8 +72,8 @@ const petAttributes = [
     'userId',
     'isMatched',
     'createdAt',
-    [Sequelize.fn("COUNT", Sequelize.col("like.id")), "likeCount"],
-    [Sequelize.fn("COUNT", Sequelize.col("comment.id")), "commentCount"]
+    [Sequelize.literal('COUNT(DISTINCT(like.id))'), "likeCount"],
+    [Sequelize.literal('COUNT(DISTINCT(comment.id))'), "commentCount"]
 ]
 
 const petIncludes = [
@@ -84,11 +84,13 @@ const petIncludes = [
         as: "like",
         model: db['petLikes'],
         attribute: [],
+        required: false,
     },
     {
         as: "comment",
         model: db['petComments'],
         attribute: [],
+        required: false,
     },
     {
         as: "user",
@@ -135,7 +137,7 @@ class PetController extends Controller {
                         include: petIncludes,
                         attributes: petAttributes,
                         group: ['pets.id'],
-                        order: [['createdAt', 'DESC']]
+                        order: [['createdAt', 'DESC']],
                     },
 
                 )

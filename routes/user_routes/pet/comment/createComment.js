@@ -16,7 +16,7 @@ router.post('/pet/:petId/comment', // --> menghasilkan req.body
             })
 
             // kalau berhasil, jalankan res.send(result)z
-            res.send(result)
+            res.status(201).send(result)
         } catch (err) {
             next(err)
         }

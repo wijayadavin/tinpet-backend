@@ -19,7 +19,6 @@ app.get('/pet',
                 if (filterParameters.limit)
                     delete filterParameters.limit
 
-
                 // get the result
                 const result = await new PetController(
                     petBodyParser(filterParameters),
@@ -33,7 +32,7 @@ app.get('/pet',
             // if no query, get all result
             const result = await new PetController().getAll()
 
-            // output & data preprocessing:
+            // output & data post-processing:
             res.send(result.map(petResultParser))
         } catch (err) { next(err) }
     })
@@ -49,7 +48,7 @@ app.get('/pet/:id',
                 req.query.limit)
                 .getDetailed()
 
-            // output & data preprocessing:
+            // output & data post-processing:
             res.send(petResultParser(result))
         } catch (err) { next(err) }
     })

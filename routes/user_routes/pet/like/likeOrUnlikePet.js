@@ -45,7 +45,7 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
              */
             if (foundLike) {
                 await new Controller('petLikes').remove(foundLike.id)
-                res.send('The user was succesfully unlike the pet')
+                return res.send('The user was succesfully unlike the pet')
             } else {
                 const foundRecipientUser = await new Controller('users').get({ id: req.user.id })
                 const result1 = await new Controller('petLikes').add(data)
@@ -57,12 +57,8 @@ router.post('/pet/:petId/like', // --> menghasilkan req.params.petId
                 }
                 const result2 = await new Controller('userNotifications').add(recipientNotif)
 
-                res.send({ petLike: result1, recipientNotif: result2 })
+                return res.status(201).send({ petLike: result1, recipientNotif: result2 })
             }
-            next(new customError(400, ER_BAD_REQUEST, "Bad Request", 'Invalid request format'))
-
-            // kalau berhasil, jalankan res.send(result 1, 2 dan 3 digabung jadi 1)
-
         } catch (err) {
             next(err)
         }
