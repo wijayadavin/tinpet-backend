@@ -95,11 +95,9 @@ const petIncludes = [
     {
         as: "user",
         model: db['users'],
-        attributes: [],
         include: {
             as: "userImage",
             model: db['userImages'],
-            attributes: [],
         }
     }
 ]
