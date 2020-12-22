@@ -10,6 +10,7 @@ const UserNotifications = db.define(
         text: { type: Sequelize.STRING, allowNull: false },
         url: { type: Sequelize.STRING, allowNull: false },
         read: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: 0 },
+        imageUrl: { type: Sequelize.STRING, allowNull: false }
     },
     {
         ...basicModel.options

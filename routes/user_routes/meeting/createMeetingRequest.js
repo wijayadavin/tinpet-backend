@@ -6,6 +6,7 @@ const Controller = require('../../../controller/dbController')
 const nodemailerConfig = require('../../../config/nodemailerConfig')
 const CustomError = require('../../../helper/customErrorHelper')
 const chatSenderHelper = require('../../../helper/chatSenderHelper')
+const UserController = require('../../../controller/userController')
 
 
 // mengirim meeting baru berdasarkan id pet penerima request (recipientPetId), dengan status requested:
@@ -46,24 +47,28 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
                 next(new CustomError(404, "ER_NOT_FOUND", "Not found", "Pet id was not found"))
             }
             // masukan recipient user id ke dalam body:
-
             req.body.recipientUserId = foundRecipientPet.userId
 
             // create data baru di table meetings:
             const result1 = await new Controller('meetings').add(req.body)
 
+            // cari data sender dan recipient user:
+            const foundSenderUser = await new UserController().getUserDataAndUserImage(req.user.id)
+            const foundRecipientUser = await new UserController().getUserDataAndUserImage(foundRecipientPet.userId)
 
             // siapkan data notif untuk sender user:
             const senderNotif = {
                 userId: req.user.id,
-                text: "Your meeting request has been sent",
+                imageUrl: foundRecipientUser.userImage.url,
+                text: `Your meeting request has been sent to ${foundRecipientUser.name}`,
                 url: `${process.env.BASE_URL}/meeting/${result1.id}`,
             }
 
             // siapkan data notif untuk recipient user:
             const recipientNotif = {
                 userId: foundRecipientPet.userId,
-                text: "You received a new meeting request",
+                imageUrl: foundSenderUser.userImage.url,
+                text: `${foundSenderUser.name} sent a meeting request to you`,
                 url: senderNotif.url,
             }
 
@@ -77,7 +82,6 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
 
 
             // data yang akan dipakai dalam pengiriman email untuk result 4:
-            const foundRecipientUser = await new Controller('users').get({ id: foundRecipientPet.userId })
             const mailOptions = {
                 from: '"TinPet" <cs.wijayadavin@gmail.com>',
                 to: foundRecipientUser.email,

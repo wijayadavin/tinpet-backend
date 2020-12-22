@@ -16,6 +16,7 @@ function routeErrorHandler(err, req, res, next) {
   }
   if (err.response) {
     if (err.response.data) {
+      // handle error form third-party api for pet image analyzer:
       if (err.response.data.message === 'Classifcation failed: correct animal not found.') {
         return res.status(400).send(new CustomError(400,
           "ER_BAD_REQUEST",
@@ -51,8 +52,10 @@ function routeErrorHandler(err, req, res, next) {
     return res.status(409).send(err);
 
   else {
-    console.error(err)
-    if (err) {
+    if (err.status >= 500) {
+      console.error(err)
+      res.status(err.status).send(err)
+    } else if (err.status <= 500) {
       res.status(err.status).send(err)
     } else {
       res.status(500).send(new CustomError(

@@ -83,23 +83,23 @@ const petIncludes = [
     {
         as: "like",
         model: db['petLikes'],
-        attribute: [],
+        attributes: [],
         required: false,
     },
     {
         as: "comment",
         model: db['petComments'],
-        attribute: [],
+        attributes: [],
         required: false,
     },
     {
         as: "user",
         model: db['users'],
-        attribute: [],
+        attributes: [],
         include: {
             as: "userImage",
             model: db['userImages'],
-            attribute: [],
+            attributes: [],
         }
     }
 ]

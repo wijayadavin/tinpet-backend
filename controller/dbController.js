@@ -88,6 +88,20 @@ class Controller {
     }
 
 
+    async getCustom(searchParameters,
+        attributes = [], includeParams = []) {
+        // lakukan pencarian dengan sequelize:
+        let result = await this.model.findOne({
+            attributes: attributes,
+            where: searchParameters,
+            include: includeParams
+        }).catch((err) => {
+            throw err
+        })
+
+        return result
+    }
+
     async getAllJoinLeft(joinedTableNames) {
         // kalau variable joinedTableNames bukan Array, maka jadikan array:
         if (typeof joinedTableNames == 'string') {

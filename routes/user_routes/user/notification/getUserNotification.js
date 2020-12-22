@@ -8,7 +8,7 @@ router.get('/notification', // --> tidak menghasilkan query, params ataupun body
     auth.authenticate('bearer', { session: false }), // --> menghasilkan req.user.id
     async (req, res, next) => {
         try {
-            const result = await new Controller('userNotifications').get({ userId: req.user.id })
+            const result = await new Controller('userNotifications').getAll({ userId: req.user.id })
 
             // kalau berhasil, jalankan res.send(result)
             res.send(result)

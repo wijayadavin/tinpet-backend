@@ -4,7 +4,9 @@ const { salt, checkPassword } = require("../helper/bcryptHelper");
 const validateBody = require('../helper/jsonValidatorHelper')
 const jwt = require('jsonwebtoken')
 const jwtConfig = require('../config/jwtConfig')
-const duplicateChecker = require('../helper/duplicateChecker')
+const duplicateChecker = require('../helper/duplicateChecker');
+const db = require("../models");
+
 
 const usersSchema = {
     "description": "user registration validation",
@@ -85,6 +87,19 @@ class UserController extends Controller {
                 noRepetitionBody.password = await salt(noRepetitionBody.password)
 
             const result = await this.edit(id, noRepetitionBody)
+
+            return result
+        } catch (err) { throw err }
+    }
+
+    async getUserDataAndUserImage(id) {
+        try {
+            let result = await this.getCustom(
+                { id: id },
+                ['name', 'email', 'mobileNumber', 'address', 'city'],
+                { attributes: ['url'], model: db['userImages'] }
+            )
+            result = result['dataValues']
 
             return result
         } catch (err) { throw err }

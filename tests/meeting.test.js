@@ -1,13 +1,10 @@
-const { expect } = require("chai")
-const { random, name, internet, phone, address } = require('faker')
-
+const { random } = require('faker')
 const chaiHttp = require('chai-http')
 const chai = require('chai')
 const server = require('../server')
 const db = require('../models')
-const { userBodyParser } = require("../helper/modelHelpers/user")
-const { table } = require("console")
-const should = chai.should()
+const scriptNameHelper = require('../helper/scriptNameHelper')
+const should = chai.should() // don't delete this (needed for test!)
 let createdId = { meetings: [], userNotifications: [], userChatLines: [] }
 chai.use(chaiHttp)
 
@@ -165,6 +162,6 @@ describe(`========= Meetings =========`, () => {
                 console.log(`${tableName} test data ${id} was successfully deleted!`)
             })
         })
-        console.log('Test completed!')
+        console.log(`${scriptNameHelper} Test completed!`)
     })
 })
