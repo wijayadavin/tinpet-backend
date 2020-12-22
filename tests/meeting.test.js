@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http')
 const chai = require('chai')
 const server = require('../server')
 const db = require('../models')
-const scriptNameHelper = require('../helper/scriptNameHelper')
+const afterTestHelper = require('../helper/test/afterTestHelper')
 const should = chai.should() // don't delete this (needed for test!)
 let createdId = { meetings: [], userNotifications: [], userChatLines: [] }
 chai.use(chaiHttp)
@@ -151,7 +151,6 @@ describe(`========= Meetings =========`, () => {
     //     })
     // })
     after(() => {
-        console.log('Cleaning test data ...')
         Object.keys(createdId).forEach((tableName) => {
             createdId[tableName].forEach((id) => {
                 db[tableName].destroy({ where: { id: id } }, (err, res) => {
@@ -159,9 +158,9 @@ describe(`========= Meetings =========`, () => {
                         console.log(err)
                     }
                 })
-                console.log(`${tableName} test data ${id} was successfully deleted!`)
+                createdId[tableName] = createdId[tableName].filter(createdId => createdId !== id)
             })
         })
-        console.log(`${scriptNameHelper} Test completed!`)
+        afterTestHelper(createdId, __filename)
     })
 })

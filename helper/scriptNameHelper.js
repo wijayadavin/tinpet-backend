@@ -3,6 +3,9 @@ var path = require('path');
 
 /**
  * Get script name of your current .js file
+ * Usage example:
+ * 
+ *      const fileName = scriptNameHelper(__filename)
  * 
  * @param {any} __filename __filename data of your current .js file 
  */

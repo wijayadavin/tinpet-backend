@@ -18,7 +18,6 @@ router.post(['/meeting', '/pet/:recipientPetId/meeting'], // --> menghasilkan re
             if (req.params.recipientPetId) {
                 req.body.recipientPetId = req.params.recipientPetId
             }
-
             // merge body & hour ke dalam body dengan key 'time':
             req.body.time = await req.body.date + "T" + req.body.hour
             delete req.body.date

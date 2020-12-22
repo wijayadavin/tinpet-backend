@@ -6,6 +6,7 @@ const chai = require('chai')
 const server = require('../server')
 const db = require("../models")
 const { url } = require("inspector")
+const scriptNameHelper = require("../helper/scriptNameHelper")
 const should = chai.should()
 let createdId = { users: [], pets: [], petComments: [] }  // [] -> membuat variabel array 
 let userToken = []
@@ -273,7 +274,6 @@ describe(`========= USERS =========`, () => {
         console.log({ createdData: createdId })
         Object.keys(createdId).forEach(tableName => { //menghapus semua ID yang sudah di create dengan testingan ini
             createdId[tableName].map(id => {
-                console.log(`deleting id in table ${tableName} with id = ${id}`)
                 db[tableName].destroy({ where: { id: id } }, (err, res) => {
                     if (err) { console.error(err) }
                 })
@@ -283,5 +283,5 @@ describe(`========= USERS =========`, () => {
         }
         )
     })
-    console.log('Test completed!')
+    console.log(`${scriptNameHelper(__filename)} Test completed!`)
 })
