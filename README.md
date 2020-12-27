@@ -1,4 +1,4 @@
-# TinPet API
+# TinPet API 
 An API for a pet-matching application
 # Specifications
 1. SQL-Express-Node (SEN) tech stack
