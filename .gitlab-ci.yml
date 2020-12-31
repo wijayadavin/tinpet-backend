@@ -2,7 +2,7 @@ stages:
   - push
 
 variables:
-  SSH_KEY2: "HELLO WORLD"
+  TEST: "HELLO WORLD"
 
 pushToServer:
     stage: push
