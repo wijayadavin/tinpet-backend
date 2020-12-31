@@ -2,12 +2,11 @@ stages:
   - push
 
 variables:
-  TEST: "HELLO WORLD"
+  SSH_KEY2: "HELLO WORLD"
 
 pushToServer:
     stage: push
     image: ubuntu
-    
     script:
       - which ssh || apt update && apt install -y ssh
       - mkdir -p ~/.ssh
