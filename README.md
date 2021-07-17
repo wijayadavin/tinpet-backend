@@ -1,5 +1,9 @@
 # TinPet API 
 An API for a pet-matching application
+
+# Preview
+https://youtu.be/F6NoSvF5JOs
+
 # Specifications
 1. SQL-Express-Node (SEN) tech stack
 
